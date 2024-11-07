@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.msusman.matrix.utils.TestTags
 import matrixclientkmp.composeapp.generated.resources.Res
 import matrixclientkmp.composeapp.generated.resources.app_logo
 import org.jetbrains.compose.resources.painterResource
@@ -57,7 +58,7 @@ fun ElementLogoAtom(
                 .background(backgroundColor)
         )
         Image(
-            modifier = Modifier.testTag("onboarding_logo")
+            modifier = Modifier.testTag(TestTags.Onboarding.logo)
                 .size(size.logoSize)
                 // Do the same double shadow than on Figma...
                 .shadow(

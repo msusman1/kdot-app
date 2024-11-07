@@ -9,9 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.msusman.matrix.designSystem.components.BigIcon
+import com.msusman.matrix.utils.TestTags
 
 /**
  * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
@@ -36,8 +38,9 @@ fun IconTitleSubtitleMolecule(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = title,
+
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth().testTag(TestTags.Login.title),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary,
@@ -46,7 +49,7 @@ fun IconTitleSubtitleMolecule(
             Spacer(Modifier.height(8.dp))
             Text(
                 text = subTitle,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag(TestTags.Login.subTitle),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.secondary,

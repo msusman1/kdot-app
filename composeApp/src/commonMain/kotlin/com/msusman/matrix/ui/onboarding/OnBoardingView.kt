@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.msusman.matrix.designSystem.atomic.molecule.ButtonColumnMolecule
 import com.msusman.matrix.designSystem.atomic.atom.ElementLogoAtom
 import com.msusman.matrix.designSystem.atomic.atom.ElementLogoAtomSize
+import com.msusman.matrix.utils.TestTags
 import matrixclientkmp.composeapp.generated.resources.Res
 import matrixclientkmp.composeapp.generated.resources.screen_onboarding_sign_in_manually
 import matrixclientkmp.composeapp.generated.resources.screen_onboarding_sign_up
@@ -92,7 +93,7 @@ private fun OnBoardingContent(
                 horizontalAlignment = CenterHorizontally,
             ) {
                 Text(
-                    modifier = Modifier.testTag("onboarding_title"),
+                    modifier = Modifier.testTag(TestTags.Onboarding.title),
                     text = stringResource(
                         Res.string.screen_onboarding_welcome_title,
                         state.applicationName
@@ -102,7 +103,7 @@ private fun OnBoardingContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    modifier = Modifier.testTag("onboarding_subtitle"),
+                    modifier = Modifier.testTag(TestTags.Onboarding.subTitle),
                     text = stringResource(
                         Res.string.screen_onboarding_welcome_message,
                     ),
