@@ -28,14 +28,7 @@ fun OnBoardingPage(
         modifier = modifier
             .fillMaxSize()
     ) {
-        // BG
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(Res.drawable.onboarding_bg),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

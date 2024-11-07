@@ -10,14 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.msusman.matrix.architecture.AsyncData
 import com.msusman.matrix.data.AppPreferenceStoreImpl
 import com.msusman.matrix.data.createSetting
 import com.msusman.matrix.domain.AppPreferenceStore
-import com.msusman.matrix.ui.login.LoginFormState
-import com.msusman.matrix.ui.login.LoginState
-import com.msusman.matrix.ui.login.LoginView
-import com.msusman.matrix.ui.login.defaultAccountProvider
+import com.msusman.matrix.ui.onboarding.OnBoardingState
+import com.msusman.matrix.ui.onboarding.OnBoardingView
 import com.msusman.matrix.ui.theme.MatrixTheme
 import com.russhwolf.settings.ExperimentalSettingsApi
 import kotlinx.coroutines.launch
@@ -44,15 +41,10 @@ fun App() {
         darkTheme = darkTheme
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            LoginView(
-                state = LoginState(
-                    formState = LoginFormState("", ""),
-                    accountProvider = defaultAccountProvider,
-                    loginResultState = AsyncData.Uninitialized,
-                    eventSink = { s -> }
-                ),
-                onBackClick = {}
-            )
+            OnBoardingView(
+                state = OnBoardingState(applicationName = "Matrix Client"),
+                onCreateAccount = {},
+                onSignIn = {})
         }
     }
 }
