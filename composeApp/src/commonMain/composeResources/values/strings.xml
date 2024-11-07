@@ -3,9 +3,8 @@
     <string name="title_app_name">Matrix Client</string>
     <string name="screen_onboarding_sign_in_manually">Sign in</string>
     <string name="screen_onboarding_sign_up">Create account</string>
-    <string name="screen_onboarding_welcome_message">Welcome to the fastest %1$s ever. Supercharged for speed and simplicity.</string>
-    <string name="screen_onboarding_welcome_subtitle">Welcome to %1$s. Supercharged, for speed and simplicity.</string>
-    <string name="screen_onboarding_welcome_title">Be in your element</string>
+    <string name="screen_onboarding_welcome_title">Welcome to %1$s</string>
+    <string name="screen_onboarding_welcome_message">A secure, fast, decentralized messenger, supercharged for ease and simplicity.</string>
     <string name="action_back">Back</string>
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="dialog_title_error">Error</string>

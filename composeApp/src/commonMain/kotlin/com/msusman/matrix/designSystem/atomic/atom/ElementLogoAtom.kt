@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import matrixclientkmp.composeapp.generated.resources.Res
@@ -26,7 +27,6 @@ fun ElementLogoAtom(
     modifier: Modifier = Modifier,
     darkTheme: Boolean = isSystemInDarkTheme(),
 ) {
-    val blur = if (darkTheme) 160.dp else 24.dp
     val shadowColor = if (darkTheme) size.shadowColorDark else size.shadowColorLight
     val logoShadowColor = if (darkTheme) size.logoShadowColorDark else size.logoShadowColorLight
     val backgroundColor =
@@ -57,7 +57,7 @@ fun ElementLogoAtom(
                 .background(backgroundColor)
         )
         Image(
-            modifier = Modifier
+            modifier = Modifier.testTag("onboarding_logo")
                 .size(size.logoSize)
                 // Do the same double shadow than on Figma...
                 .shadow(
