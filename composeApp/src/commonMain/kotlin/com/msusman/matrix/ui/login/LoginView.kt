@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -49,6 +50,7 @@ import com.msusman.matrix.designSystem.components.buttons.BackButton
 import com.msusman.matrix.designSystem.components.buttons.ProgressButton
 import com.msusman.matrix.designSystem.components.dialogs.ErrorDialog
 import com.msusman.matrix.designSystem.components.onTabOrEnterKeyFocusNext
+import com.msusman.matrix.utils.TestTags
 import matrixclientkmp.composeapp.generated.resources.Res
 import matrixclientkmp.composeapp.generated.resources.a11y_hide_password
 import matrixclientkmp.composeapp.generated.resources.a11y_show_password
@@ -174,6 +176,7 @@ private fun LoginForm(
             value = loginFieldState,
             readOnly = isLoading,
             modifier = Modifier
+                .testTag(TestTags.Login.userNameInput)
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager),
             placeholder = {
@@ -194,9 +197,12 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    IconButton(onClick = {
-                        loginFieldState = ""
-                    }) {
+                    IconButton(
+                        modifier = Modifier.testTag(TestTags.Login.clearIcon),
+                        onClick = {
+                            loginFieldState = ""
+                            eventSink(LoginEvent.setUsername(""))
+                        }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = stringResource(Res.string.action_clear)
@@ -218,7 +224,7 @@ private fun LoginForm(
             readOnly = isLoading,
             modifier = Modifier
                 .fillMaxWidth()
-                .onTabOrEnterKeyFocusNext(focusManager),
+                .onTabOrEnterKeyFocusNext(focusManager).testTag(TestTags.Login.passwordInput),
             onValueChange = {
                 val sanitized = it.sanitize()
                 passwordFieldState = sanitized
@@ -236,7 +242,10 @@ private fun LoginForm(
                         Res.string.a11y_show_password
                     )
 
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                IconButton(
+                    onClick = { passwordVisible = !passwordVisible },
+                    modifier = Modifier.testTag(TestTags.Login.passwordToggleButton)
+                ) {
                     Icon(imageVector = image, description)
                 }
             },

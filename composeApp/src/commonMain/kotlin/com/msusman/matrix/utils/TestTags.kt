@@ -10,5 +10,9 @@ object TestTags {
     object Login {
         const val title = "login_title"
         const val subTitle = "login_sub_title"
+        const val clearIcon = "clearIcon"
+        const val userNameInput = "userNameInput"
+        const val passwordInput = "passwordInput"
+        const val passwordToggleButton = "passwordToggleButton"
     }
 }

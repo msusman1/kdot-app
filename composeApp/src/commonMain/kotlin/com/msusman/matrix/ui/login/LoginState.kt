@@ -15,7 +15,11 @@ data class LoginState(
                 formState.password.isNotEmpty()
 }
 
-data class LoginFormState(val username: String, val password: String)
+data class LoginFormState(val username: String, val password: String){
+    companion object {
+        val Default = LoginFormState("", "")
+    }
+}
 
 data class AccountProvider(
     val url: String,
