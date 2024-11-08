@@ -81,6 +81,8 @@ kotlin {
             implementation(libs.kotlin.test)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
+            implementation(libs.molecule.runtime)
+            implementation(libs.turbine)
         }
 
         desktopMain.dependencies {

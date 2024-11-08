@@ -16,7 +16,7 @@ junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
 dagger = "2.52"
-multiplatform-settings="1.2.0"
+multiplatform-settings = "1.2.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -35,6 +35,8 @@ kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 google-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
+molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
+turbine = "app.cash.turbine:turbine:1.2.0"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
