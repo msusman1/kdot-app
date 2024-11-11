@@ -17,6 +17,7 @@ kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
 dagger = "2.52"
 multiplatform-settings = "1.2.0"
+trixnityVersion = "4.9.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -37,6 +38,9 @@ multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settin
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 turbine = "app.cash.turbine:turbine:1.2.0"
+trixnity_core= { group = "net.folivo", name = "trixnity-core", version.ref = "trixnityVersion" }
+trixnity_api_client= { group = "net.folivo", name = "trixnity-api-client", version.ref = "trixnityVersion" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

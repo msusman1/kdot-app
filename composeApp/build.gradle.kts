@@ -75,6 +75,9 @@ kotlin {
             implementation(libs.google.dagger)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.trixnity.core)
+            implementation(libs.trixnity.api.client)
+
         }
 
         commonTest.dependencies {
