@@ -75,8 +75,9 @@ kotlin {
             implementation(libs.google.dagger)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
-            implementation(libs.trixnity.core)
-            implementation(libs.trixnity.api.client)
+//            implementation(libs.trixnity.core)
+//            implementation(libs.trixnity.api.client)
+//            implementation(libs.trixnity.client)
 
         }
 
@@ -96,11 +97,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.msusman.matrix"
+    namespace = "io.kdot.app"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.msusman.matrix"
+        applicationId = "io.kdot.app"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -128,11 +129,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.msusman.matrix.MainKt"
+        mainClass = "io.kdot.app.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.msusman.matrix"
+            packageName = "io.kdot.app"
             packageVersion = "1.0.0"
         }
     }

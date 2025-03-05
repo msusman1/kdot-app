@@ -1,4 +1,4 @@
-rootProject.name = "MatrixClientKMP"
+rootProject.name = "KdotApp"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

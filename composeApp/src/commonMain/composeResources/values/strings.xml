@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="title_app_name">Matrix Client</string>
+    <string name="title_app_name">KDot</string>
     <string name="screen_onboarding_sign_in_manually">Sign in</string>
     <string name="screen_onboarding_sign_up">Create account</string>
     <string name="screen_onboarding_welcome_title">Welcome to %1$s</string>
