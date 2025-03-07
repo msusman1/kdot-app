@@ -6,15 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.kdot.app.ui.onboarding.OnBoardingView
-import io.kdot.app.ui.theme.MatrixTheme
+import io.kdot.app.ui.theme.KDotTheme
 
 
 @Composable
-fun App() {
+fun KDotApp() {
     val presenter = remember {
         io.kdot.app.ui.onboarding.OnBoardingPresenter()
     }
-    MatrixTheme {
+    KDotTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             OnBoardingView(
                 state = presenter.present(),

@@ -29,3 +29,6 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+
+include("feature:login")
+findProject(":feature:login")?.name = "login"
