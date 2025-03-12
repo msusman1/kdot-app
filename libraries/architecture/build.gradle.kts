@@ -4,11 +4,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
 }
+
 android {
-    namespace = "io.kdot.app.feature.login"
+    namespace = "io.kdot.app.libraries.architecture"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     compileOptions {
@@ -22,7 +21,6 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
     listOf(
         iosX64(),
         iosArm64(),
@@ -31,7 +29,7 @@ kotlin {
         macosArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "FeatureLogin"
+            baseName = "architecture"
             isStatic = true
         }
     }
@@ -40,26 +38,9 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "feature_login"
+        moduleName = "architecture"
         browser()
         binaries.executable()
     }
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(project(":libraries:designsystem"))
-            implementation(project(":libraries:architecture"))
-        }
-    }
-
 }
-

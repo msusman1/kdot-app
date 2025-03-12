@@ -1,20 +1,18 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinMultiplatform)  // required for create kmp apps
+    alias(libs.plugins.androidApplication)   // required for creating android app moudles for kmp
+    alias(libs.plugins.composeMultiplatform) // wring ui in compose for all plat-forms
+    alias(libs.plugins.composeCompiler)     // required for compose compiler
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -78,6 +76,10 @@ kotlin {
 //            implementation(libs.trixnity.core)
 //            implementation(libs.trixnity.api.client)
 //            implementation(libs.trixnity.client)
+            implementation(project(":feature:login"))
+            implementation(project(":feature:onboarding"))
+            implementation(project(":libraries:architecture"))
+            implementation(project(":libraries:designsystem"))
 
         }
 

@@ -8,7 +8,7 @@ import com.russhwolf.settings.coroutines.toSuspendSettings
 
 @OptIn(ExperimentalSettingsApi::class)
 actual fun createSetting(): SuspendSettings {
-    val preference = io.kdot.app.MatrixApplication.instance.getSharedPreferences(
+    val preference = io.kdot.app.KDotApplication.instance.getSharedPreferences(
         "matrix.preference_pb",
         Context.MODE_PRIVATE
     )

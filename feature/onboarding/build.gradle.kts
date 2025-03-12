@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 android {
-    namespace = "io.kdot.app.feature.login"
+    namespace = "io.kdot.app.feature.onboarding"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     compileOptions {
@@ -31,7 +31,7 @@ kotlin {
         macosArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "FeatureLogin"
+            baseName = "FeatureOnboarding"
             isStatic = true
         }
     }
@@ -40,7 +40,7 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "feature_login"
+        moduleName = "feature_onboarding"
         browser()
         binaries.executable()
     }
