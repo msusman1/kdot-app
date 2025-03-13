@@ -17,7 +17,7 @@ class LoginViewModel {
     val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
     private val coroutineScope = CoroutineScope(Job())
 
-    fun handleEvents(event: LoginEvent) {
+    fun handleAction(event: LoginEvent) {
         when (event) {
             LoginEvent.Reset -> {
                 _loginState.value = LoginState.Default

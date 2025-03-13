@@ -25,16 +25,29 @@ import io.kdot.app.libraries.designsystem.atomic.atom.KDotLogoAtom
 import io.kdot.app.libraries.designsystem.atomic.molecule.ButtonColumnMolecule
 import org.jetbrains.compose.resources.stringResource
 
+@Composable
+fun OnBoardingScreen(
+    onSignIn: () -> Unit,
+    onCreateAccount: () -> Unit,
+) {
+    val vm = OnBoardingViewModel()
+    val onBoardingState = vm.onBoardingState
+    OnBoardingView(
+        state = onBoardingState,
+        onSignIn = onSignIn,
+        onCreateAccount = onCreateAccount,
+    )
+}
+
 
 @Composable
 fun OnBoardingView(
     state: OnBoardingState,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
             .padding(all = 20.dp),
@@ -89,7 +102,7 @@ private fun OnBoardingContent(
                 Text(
                     text = stringResource(
                         Resources.String.screen_onboarding_welcome_title,
-                        state.applicationName
+                        stringResource(state.applicationName)
                     ),
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Center

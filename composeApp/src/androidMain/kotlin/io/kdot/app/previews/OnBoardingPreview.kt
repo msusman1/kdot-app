@@ -10,6 +10,7 @@ import io.kdot.app.libraries.designsystem.Resources
 @Preview(uiMode = UI_MODE_NIGHT_NO, showBackground = true)
 @Composable
 fun OnBoardingPreview() {
+
     OnBoardingView(
         state = OnBoardingState(Resources.String.title_app_name),
         onSignIn = {},

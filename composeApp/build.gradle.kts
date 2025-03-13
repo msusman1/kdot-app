@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.androidApplication)   // required for creating android app moudles for kmp
     alias(libs.plugins.composeMultiplatform) // wring ui in compose for all plat-forms
     alias(libs.plugins.composeCompiler)     // required for compose compiler
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -73,6 +74,8 @@ kotlin {
             implementation(libs.google.dagger)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.jetbrain.compose.navigation)
+            implementation(libs.kotlinx.serialization)
 //            implementation(libs.trixnity.core)
 //            implementation(libs.trixnity.api.client)
 //            implementation(libs.trixnity.client)

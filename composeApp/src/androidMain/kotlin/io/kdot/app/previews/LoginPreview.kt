@@ -13,9 +13,8 @@ fun LoginPreview() {
     LoginView(
         state = LoginState(
             formState = LoginFormState.Default,
-            loginResultState = AsyncData.Uninitialized,
-
-            ),
+            loginResultState = AsyncData.Uninitialized
+        ),
         onBackClick = {},
         handleAction = {}
     )

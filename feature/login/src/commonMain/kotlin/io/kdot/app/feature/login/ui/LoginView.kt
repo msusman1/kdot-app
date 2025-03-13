@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,18 @@ import io.kdot.app.libraries.designsystem.components.dialogs.ErrorDialog
 import io.kdot.app.libraries.designsystem.components.onTabOrEnterKeyFocusNext
 import org.jetbrains.compose.resources.stringResource
 
+@Composable
+fun LoginScreen(
+    onBackClick: () -> Unit,
+) {
+    val vm = LoginViewModel()
+    val state = vm.loginState.collectAsState()
+    LoginView(
+        state = state.value,
+        onBackClick = onBackClick,
+        handleAction = vm::handleAction
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,8 +71,8 @@ fun LoginView(
     state: LoginState,
     onBackClick: () -> Unit,
     handleAction: (LoginEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) {
+
+    ) {
     val isLoading by remember(state.loginResultState) {
         derivedStateOf {
             state.loginResultState is AsyncData.Loading
@@ -75,7 +88,6 @@ fun LoginView(
     }
 
     Scaffold(
-        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {},
