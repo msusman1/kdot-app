@@ -1,21 +1,22 @@
 package io.kdot.app.feature.login.ui
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.kdot.app.libraries.architecture.AsyncData
 import io.kdot.app.libraries.architecture.model.AuthenticationException
 import io.kdot.app.libraries.architecture.model.UserId
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import net.folivo.trixnity.client.serverDiscovery
 
-class LoginViewModel {
-    private val _loginState: MutableStateFlow<LoginState> =
-        MutableStateFlow(LoginState.Default)
-    val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
-    private val coroutineScope = CoroutineScope(Job())
+
+class LoginViewModel : ViewModel() {
+    private val _loginState = MutableStateFlow(LoginState.Default)
+    val loginState = _loginState.asStateFlow()
+
+
 
     fun handleAction(event: LoginEvent) {
         when (event) {
@@ -24,7 +25,7 @@ class LoginViewModel {
             }
 
             LoginEvent.Submit -> {
-                coroutineScope.submit(loginState.value.formState)
+                viewModelScope.submit(loginState.value.formState)
             }
 
             is LoginEvent.setUsername -> updateFormState(loginState.value.formState) {
@@ -48,8 +49,23 @@ class LoginViewModel {
     private fun CoroutineScope.submit(
         loginFormState: LoginFormState,
     ) = launch {
+
         _loginState.value = loginState.value.copy(loginResultState = AsyncData.Loading())
-        delay(2000)
+        val server = "https://matrix.org"
+        val url = server.serverDiscovery()
+       /* MatrixClient.loginWithPassword(
+            baseUrl = url,
+            identifier = IdentifierType.User(loginFormState.username),
+            password = loginFormState.password,
+            deviceId = null,
+            initialDeviceDisplayName = null,
+            repositoriesModulesFactory = {
+                Module
+            },
+            mediaStoreFactory = {
+
+            }
+        )*/
         if (loginFormState.username == loginFormState.password) {
             _loginState.value =
                 loginState.value.copy(loginResultState = AsyncData.Success(UserId("2345")))

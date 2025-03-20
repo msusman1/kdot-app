@@ -37,7 +37,7 @@ kotlin {
     jvm("desktop")
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
+    js {
         moduleName = "architecture"
         browser()
         binaries.executable()

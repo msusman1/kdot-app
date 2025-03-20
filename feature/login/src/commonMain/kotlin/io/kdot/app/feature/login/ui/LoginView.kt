@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.kdot.app.libraries.architecture.AsyncData
 import io.kdot.app.libraries.designsystem.Resources
 import io.kdot.app.libraries.designsystem.atomic.molecule.ButtonColumnMolecule
@@ -56,7 +57,7 @@ import org.jetbrains.compose.resources.stringResource
 fun LoginScreen(
     onBackClick: () -> Unit,
 ) {
-    val vm = LoginViewModel()
+    val vm = viewModel { LoginViewModel() }
     val state = vm.loginState.collectAsState()
     LoginView(
         state = state.value,

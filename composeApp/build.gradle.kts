@@ -34,8 +34,8 @@ kotlin {
 
     jvm("desktop")
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
+/*
+    js(IR) {
         moduleName = "composeApp"
         browser {
             val rootDirPath = project.rootDir.path
@@ -52,7 +52,7 @@ kotlin {
             }
         }
         binaries.executable()
-    }
+    }*/
 
     sourceSets {
         val desktopMain by getting
@@ -60,6 +60,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -69,20 +71,23 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.google.dagger)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.jetbrain.compose.navigation)
             implementation(libs.kotlinx.serialization)
-//            implementation(libs.trixnity.core)
-//            implementation(libs.trixnity.api.client)
-//            implementation(libs.trixnity.client)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            implementation(libs.trixnity.core)
+            implementation(libs.trixnity.api.client)
+            implementation(libs.trixnity.client)
             implementation(project(":feature:login"))
             implementation(project(":feature:onboarding"))
             implementation(project(":libraries:architecture"))
             implementation(project(":libraries:designsystem"))
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
 
         }
 
@@ -98,6 +103,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
+
     }
 }
 

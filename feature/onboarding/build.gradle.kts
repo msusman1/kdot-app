@@ -39,12 +39,12 @@ kotlin {
 
     jvm("desktop")
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
+
+   /* js(IR) {
         moduleName = "feature_onboarding"
         browser()
         binaries.executable()
-    }
+    }*/
 
     sourceSets {
         commonMain.dependencies {
@@ -55,10 +55,11 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(project(":libraries:designsystem"))
             implementation(project(":libraries:architecture"))
+            implementation(project(":libraries:core"))
         }
     }
 

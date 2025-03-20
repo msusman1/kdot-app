@@ -1,15 +1,12 @@
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.androidLibrary)
 }
 
 android {
-    namespace = "io.kdot.app.libraries.designsystem"
+    namespace = "io.kdot.app.libraries.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     compileOptions {
@@ -17,6 +14,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
 kotlin {
     androidTarget {
         compilerOptions {
@@ -31,30 +29,17 @@ kotlin {
         macosArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "designsystem"
+            baseName = "core"
             isStatic = true
         }
     }
 
     jvm("desktop")
 
-    @OptIn(ExperimentalWasmDsl::class)
-    js {
-        moduleName = "designsystem"
-        browser()
-        binaries.executable()
-    }
-
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            implementation(libs.androidx.datasotre)
+            implementation(libs.androidx.datasotre.preference)
         }
     }
-
-
 }

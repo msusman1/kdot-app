@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.kdot.app.libraries.designsystem.Resources
 import io.kdot.app.libraries.designsystem.atomic.atom.ElementLogoAtomSize
 import io.kdot.app.libraries.designsystem.atomic.atom.KDotLogoAtom
@@ -30,7 +31,7 @@ fun OnBoardingScreen(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
 ) {
-    val vm = OnBoardingViewModel()
+    val vm = viewModel{ OnBoardingViewModel() }
     val onBoardingState = vm.onBoardingState
     OnBoardingView(
         state = onBoardingState,
