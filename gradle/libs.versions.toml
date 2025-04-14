@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.1"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -11,26 +11,24 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-multiplatform = "1.7.0"
+compose-multiplatform = "1.7.3"
 junit = "4.13.2"
-kotlin = "2.1.10"
+kotlin = "2.1.20"
 kotlinx-coroutines = "1.10.1"
-dagger = "2.55"
 multiplatform-settings = "1.2.0"
-trixnityVersion = "4.13.2"
+trixnityVersion = "4.15.0"
 jetbrainsKotlinJvm = "2.1.10"
 compose-navigation = "2.8.0-alpha10"
 serialization = "1.8.0"
-lifecycle-viewmodel-compose = "2.8.2"
-datatore = "1.1.3"
-koin = "4.0.2"
+lifecycle-viewmodel-compose = "2.8.3"
+datatore = "1.1.4"
+koin = "4.0.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-google-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"

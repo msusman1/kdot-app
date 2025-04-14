@@ -10,11 +10,11 @@ import io.kdot.app.features.onboarding.ui.OnBoardingScreen
 import io.kdot.app.libraries.designsystem.screens.SplashScreen
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+
 @Composable
 fun MainNavGraph() {
     val navController = rememberNavController()
     LaunchedEffect(Unit) {
-        delay(2000)
         navController.navigate(Onboarding)
     }
     NavHost(navController = navController, startDestination = Splash) {
@@ -22,19 +22,15 @@ fun MainNavGraph() {
             SplashScreen()
         }
         composable<Onboarding> {
-            OnBoardingScreen(
-                onSignIn = {
-                    navController.navigate(Login)
-                },
-                onCreateAccount = {
-                    navController.navigate(Register)
-                }
-            )
+            OnBoardingScreen(onSignIn = {
+                navController.navigate(Login)
+            }, onCreateAccount = {
+                navController.navigate(Register)
+            })
         }
         composable<Login> {
             LoginScreen(
-                onBackClick = { navController.navigateUp() }
-            )
+                onBackClick = { navController.navigateUp() })
         }
     }
 

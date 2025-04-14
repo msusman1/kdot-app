@@ -31,7 +31,7 @@ fun OnBoardingScreen(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
 ) {
-    val vm = viewModel{ OnBoardingViewModel() }
+    val vm = viewModel { OnBoardingViewModel() }
     val onBoardingState = vm.onBoardingState
     OnBoardingView(
         state = onBoardingState,
