@@ -14,7 +14,7 @@ androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.3"
 junit = "4.13.2"
 kotlin = "2.1.20"
-kotlinx-coroutines = "1.10.1"
+kotlinx-coroutines = "1.10.2"
 multiplatform-settings = "1.2.0"
 trixnityVersion = "4.15.0"
 jetbrainsKotlinJvm = "2.1.10"
@@ -23,19 +23,40 @@ serialization = "1.8.0"
 lifecycle-viewmodel-compose = "2.8.3"
 datatore = "1.1.4"
 koin = "4.0.3"
+okio = "3.10.2"
+ktor = "3.1.2"
+
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version = "1.10.2" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-coroutines = { group = "com.russhwolf", name = "multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 turbine = "app.cash.turbine:turbine:1.2.0"
+
+
 trixnity-core = { group = "net.folivo", name = "trixnity-core", version.ref = "trixnityVersion" }
 trixnity-api-client = { group = "net.folivo", name = "trixnity-api-client", version.ref = "trixnityVersion" }
 trixnity-client = { group = "net.folivo", name = "trixnity-client", version.ref = "trixnityVersion" }
+trixnity-olm = { group = "net.folivo", name = "trixnity-olm", version.ref = "trixnityVersion" }
+trixnity-crypto-core = { group = "net.folivo", name = "trixnity-crypto-core", version.ref = "trixnityVersion" }
+trixnity-client-repository-room = { module = "net.folivo:trixnity-client-repository-room", version.ref = "trixnityVersion" }
+trixnity-client-media-okio = { module = "net.folivo:trixnity-client-media-okio", version.ref = "trixnityVersion" }
+
+trixnity-client-repository-exposed = { module = "net.folivo:trixnity-client-repository-exposed", version.ref = "trixnityVersion" }
+trixnity-client-repository-indexeddb = { module = "net.folivo:trixnity-client-repository-indexeddb", version.ref = "trixnityVersion" }
+trixnity-client-media-opfs = { module = "net.folivo:trixnity-client-media-opfs", version.ref = "trixnityVersion" }
+trixnity-client-media-indexeddb = { module = "net.folivo:trixnity-client-media-indexeddb", version.ref = "trixnityVersion" }
+
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
+
 jetbrain-compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 androidx-lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle-viewmodel-compose" }
@@ -47,6 +68,8 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

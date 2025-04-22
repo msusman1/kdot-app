@@ -1,8 +1,6 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)  // required for create kmp apps
@@ -23,8 +21,6 @@ kotlin {
         iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
-        macosX64(),
-        macosArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -34,25 +30,10 @@ kotlin {
 
     jvm("desktop")
 
-/*
     js(IR) {
-        moduleName = "composeApp"
-        browser {
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
+        browser { }
         binaries.executable()
-    }*/
+    }
 
     sourceSets {
         val desktopMain by getting
@@ -72,18 +53,13 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.runtime.compose)
-//            implementation(libs.multiplatform.settings)
-//            implementation(libs.multiplatform.settings.coroutines)
             implementation(libs.jetbrain.compose.navigation)
             implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.trixnity.core)
+         /*   implementation(libs.trixnity.core)
             implementation(libs.trixnity.api.client)
             implementation(libs.trixnity.client)
-            implementation(project(":feature:login"))
-            implementation(project(":feature:onboarding"))
-            implementation(project(":libraries:architecture"))
-            implementation(project(":libraries:designsystem"))
+            implementation(libs.trixnity.olm)*/
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             api(libs.koin.core)
@@ -102,7 +78,11 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
         }
+        jsMain.dependencies {
+//            implementation(libs.trixnity.core)
+            implementation(compose.html.core)
 
+        }
     }
 }
 

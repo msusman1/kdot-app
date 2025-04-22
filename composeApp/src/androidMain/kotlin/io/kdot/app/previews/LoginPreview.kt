@@ -2,10 +2,10 @@ package io.kdot.app.previews
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import io.kdot.app.feature.login.ui.LoginFormState
-import io.kdot.app.feature.login.ui.LoginState
-import io.kdot.app.feature.login.ui.LoginView
-import io.kdot.app.libraries.architecture.AsyncData
+import io.kdot.app.architecture.AsyncData
+import io.kdot.app.ui.login.LoginFormState
+import io.kdot.app.ui.login.LoginState
+import io.kdot.app.ui.login.LoginView
 
 @Composable
 @Preview

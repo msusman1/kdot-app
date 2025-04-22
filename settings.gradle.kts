@@ -29,8 +29,3 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":feature:onboarding")
-include(":feature:login")
-include(":libraries:designsystem")
-include(":libraries:architecture")
-include(":libraries:core")

@@ -5,10 +5,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.kdot.app.feature.login.ui.LoginScreen
-import io.kdot.app.features.onboarding.ui.OnBoardingScreen
-import io.kdot.app.libraries.designsystem.screens.SplashScreen
-import kotlinx.coroutines.delay
+import io.kdot.app.designsystem.screens.SplashScreen
+import io.kdot.app.ui.login.LoginScreen
+import io.kdot.app.ui.onboarding.OnBoardingScreen
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -22,11 +21,14 @@ fun MainNavGraph() {
             SplashScreen()
         }
         composable<Onboarding> {
-            OnBoardingScreen(onSignIn = {
-                navController.navigate(Login)
-            }, onCreateAccount = {
-                navController.navigate(Register)
-            })
+            OnBoardingScreen(
+                onSignIn = {
+                    navController.navigate(Login)
+                },
+                onCreateAccount = {
+                    navController.navigate(Register)
+                }
+            )
         }
         composable<Login> {
             LoginScreen(
