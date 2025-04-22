@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform) // wring ui in compose for all plat-forms
     alias(libs.plugins.composeCompiler)     // required for compose compiler
     alias(libs.plugins.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -42,8 +44,13 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
+            implementation(libs.trixnity.client.media.okio)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.trixnity.client.repository.room)
+            implementation(libs.ktor.client.okhttp)
         }
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -56,13 +63,16 @@ kotlin {
             implementation(libs.jetbrain.compose.navigation)
             implementation(libs.kotlinx.serialization)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
-         /*   implementation(libs.trixnity.core)
+            implementation(libs.trixnity.core)
             implementation(libs.trixnity.api.client)
             implementation(libs.trixnity.client)
-            implementation(libs.trixnity.olm)*/
+            implementation(libs.trixnity.olm)
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
             api(libs.koin.core)
+            implementation(libs.ktor.client.core)
 
         }
 
@@ -77,11 +87,28 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-        }
-        jsMain.dependencies {
-//            implementation(libs.trixnity.core)
-            implementation(compose.html.core)
+            implementation(libs.trixnity.client.media.okio)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.trixnity.client.repository.room)
+            implementation(libs.ktor.client.okhttp)
 
+        }
+
+        iosMain.dependencies {
+            implementation(libs.trixnity.client.media.okio)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.trixnity.client.repository.room)
+            implementation(libs.ktor.client.darwin)
+
+        }
+
+        jsMain.dependencies {
+            implementation(compose.html.core)
+            implementation(libs.trixnity.client.media.opfs)
+            implementation(libs.trixnity.client.repository.indexeddb)
+            implementation(libs.ktor.client.js)
         }
     }
 }
@@ -113,8 +140,13 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     debugImplementation(compose.uiTooling)
+    ksp(libs.androidx.room.compiler)
 }
 
 compose.desktop {

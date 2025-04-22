@@ -41,7 +41,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.kdot.app.architecture.AsyncData
 import io.kdot.app.designsystem.Resources
 import io.kdot.app.designsystem.atomic.molecule.ButtonColumnMolecule
@@ -52,12 +51,13 @@ import io.kdot.app.designsystem.components.buttons.ProgressButton
 import io.kdot.app.designsystem.components.dialogs.ErrorDialog
 import io.kdot.app.designsystem.components.onTabOrEnterKeyFocusNext
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
     onBackClick: () -> Unit,
+    vm: LoginViewModel = koinViewModel()
 ) {
-    val vm = viewModel { LoginViewModel() }
     val state = vm.loginState.collectAsState()
     LoginView(
         state = state.value,
@@ -79,12 +79,11 @@ fun LoginView(
             state.loginResultState is AsyncData.Loading
         }
     }
-//    val focusManager = LocalFocusManager.current
+    val focusManager = LocalFocusManager.current
 
     fun submit() {
         // Clear focus to prevent keyboard issues with textfields
-//        focusManager.clearFocus(force = true)
-
+        focusManager.clearFocus(force = true)
         handleAction(LoginEvent.Submit)
     }
 

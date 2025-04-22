@@ -1,7 +1,7 @@
 package io.kdot.app.ui.login
 
 import io.kdot.app.architecture.AsyncData
-import io.kdot.app.architecture.model.UserId
+import net.folivo.trixnity.core.model.UserId
 
 
 data class LoginState(

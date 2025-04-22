@@ -2,6 +2,7 @@ package io.kdot.app
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import io.kdot.app.di.koinSharedConfiguration
 
 fun main() = application {
     Window(
@@ -9,6 +10,6 @@ fun main() = application {
         title = "KDot",
     ) {
 
-        KDotApp()
+        KDotApp(koinAppDeclaration = { koinSharedConfiguration() })
     }
 }

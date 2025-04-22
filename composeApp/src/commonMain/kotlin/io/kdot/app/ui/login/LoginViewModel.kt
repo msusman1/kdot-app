@@ -4,20 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.kdot.app.architecture.AsyncData
 import io.kdot.app.architecture.model.AuthenticationException
+import io.kdot.app.matrix.MatrixClientFactory
+import io.kdot.app.matrix.MatrixClientProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch/*
-import net.folivo.trixnity.client.MatrixClient
-import net.folivo.trixnity.client.loginWithPassword
-import net.folivo.trixnity.client.media.InMemoryMediaStore
-import net.folivo.trixnity.client.media.MediaServiceImpl
-import net.folivo.trixnity.client.serverDiscovery
-import net.folivo.trixnity.clientserverapi.model.authentication.IdentifierType*/
-import org.koin.dsl.module
+import kotlinx.coroutines.launch
 
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val matrixClientFactory: MatrixClientFactory,
+    private val matrixClientProvider: MatrixClientProvider
+) : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState.Default)
     val loginState = _loginState.asStateFlow()
 
@@ -53,29 +51,22 @@ class LoginViewModel : ViewModel() {
     private fun CoroutineScope.submit(
         loginFormState: LoginFormState,
     ) = launch {
-
         _loginState.value = loginState.value.copy(loginResultState = AsyncData.Loading())
-        val server = "https://matrix.org"
-
-   /*     server.serverDiscovery().onSuccess { url ->
-            val matrixClient = MatrixClient.loginWithPassword(
-                baseUrl = url,
-                identifier = IdentifierType.User(loginFormState.username),
-                password = loginFormState.password,
-                deviceId = null,
-                initialDeviceDisplayName = null,
-                repositoriesModule = module { },
-                mediaStore = InMemoryMediaStore()
-            )
-        }.onFailure {
-            _loginState.value = loginState.value.copy(
-                loginResultState = AsyncData.Failure(
-                    AuthenticationException.Generic(message = it.message ?: "Unknown Error")
+        matrixClientFactory.createFromLogin(loginFormState.username, loginFormState.password)
+            .onSuccess {
+                matrixClientProvider.setClient(it)
+                val userId = it.userId
+                _loginState.value = loginState.value.copy(
+                    loginResultState = AsyncData.Success(userId)
                 )
-            )
-        }
-*/
+            }.onFailure {
+                _loginState.value = loginState.value.copy(
+                    loginResultState = AsyncData.Failure(
+                        AuthenticationException.Generic(message = it.message ?: "Unknown Error")
+                    )
+                )
+            }
+
 
     }
 }
-
