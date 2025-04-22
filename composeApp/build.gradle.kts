@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel.navigation)
             api(libs.koin.core)
             implementation(libs.ktor.client.core)
+            implementation(libs.io.coil)
 
         }
 

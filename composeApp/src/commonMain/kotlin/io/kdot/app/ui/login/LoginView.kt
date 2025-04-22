@@ -27,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -56,11 +57,19 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginScreen(
     onBackClick: () -> Unit,
+    onLoginSuccess: () -> Unit,
     vm: LoginViewModel = koinViewModel()
 ) {
-    val state = vm.loginState.collectAsState()
+    val state by vm.loginState.collectAsState()
+    LaunchedEffect(state.loginResultState) {
+        val result = state.loginResultState
+        if (result is AsyncData.Success) {
+            onLoginSuccess()
+            vm.handleAction(LoginEvent.Reset)
+        }
+    }
     LoginView(
-        state = state.value,
+        state = state,
         onBackClick = onBackClick,
         handleAction = vm::handleAction
     )

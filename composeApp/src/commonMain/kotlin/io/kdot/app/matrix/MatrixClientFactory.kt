@@ -6,12 +6,11 @@ import net.folivo.trixnity.client.MatrixClient
 import net.folivo.trixnity.client.fromStore
 import net.folivo.trixnity.client.loginWithPassword
 import net.folivo.trixnity.clientserverapi.model.authentication.IdentifierType
-import net.folivo.trixnity.core.model.UserId
 
 interface MatrixClientFactory {
 
     suspend fun createFromLogin(userName: String, password: String): Result<MatrixClient>
-    suspend fun createFromStore(userId: UserId): Result<MatrixClient?>
+    suspend fun createFromStore(): Result<MatrixClient?>
 }
 
 class MatrixClientFactoryImpl(
@@ -33,7 +32,7 @@ class MatrixClientFactoryImpl(
         )
     }
 
-    override suspend fun createFromStore(userId: UserId): Result<MatrixClient?> {
+    override suspend fun createFromStore(): Result<MatrixClient?> {
         return runCatching {
             MatrixClient.fromStore(
                 repositoriesModule = createRepositoriesModule.load(null),

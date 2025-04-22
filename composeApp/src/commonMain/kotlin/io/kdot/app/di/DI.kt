@@ -7,6 +7,8 @@ import io.kdot.app.matrix.platformCreateMediaStoreModule
 import io.kdot.app.matrix.platformCreateRepositoriesModule
 import io.kdot.app.matrix.platformPathsModule
 import io.kdot.app.ui.login.LoginViewModel
+import io.kdot.app.ui.splash.SplashViewModel
+import io.kdot.app.ui.rooms.RoomsViewModel
 import org.koin.core.KoinApplication
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -15,6 +17,8 @@ import org.koin.dsl.module
 
 val appModules = module {
     viewModelOf(::LoginViewModel)
+    viewModelOf(::SplashViewModel)
+    viewModelOf(::RoomsViewModel)
     single<MatrixClientFactory> { MatrixClientFactoryImpl(get(), get()) }
     singleOf(::MatrixClientProvider)
 }

@@ -1,24 +1,33 @@
 package io.kdot.app
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.kdot.app.designsystem.screens.SplashScreen
 import io.kdot.app.ui.login.LoginScreen
 import io.kdot.app.ui.onboarding.OnBoardingScreen
+import io.kdot.app.ui.rooms.RoomsScreen
+import io.kdot.app.ui.splash.SplashScreen
 import kotlinx.serialization.Serializable
 
 @Composable
 fun MainNavGraph() {
     val navController = rememberNavController()
-    LaunchedEffect(Unit) {
-        navController.navigate(Onboarding)
-    }
+
     NavHost(navController = navController, startDestination = Splash) {
         composable<Splash> {
-            SplashScreen()
+            SplashScreen(
+                onNavigateToRooms = {
+                    navController.navigate(Rooms) {
+                        popUpTo(Splash) { inclusive = true }
+                    }
+                },
+                onNavigateToOnboarding = {
+                    navController.navigate(Onboarding) {
+                        popUpTo(Splash) { inclusive = true }
+                    }
+                }
+            )
         }
         composable<Onboarding> {
             OnBoardingScreen(
@@ -32,7 +41,13 @@ fun MainNavGraph() {
         }
         composable<Login> {
             LoginScreen(
-                onBackClick = { navController.navigateUp() })
+                onBackClick = { navController.navigateUp() },
+                onLoginSuccess = {
+                    navController.navigate(Rooms)
+                })
+        }
+        composable<Rooms> {
+            RoomsScreen()
         }
     }
 
@@ -49,3 +64,6 @@ object Login
 
 @Serializable
 object Register
+
+@Serializable
+object Rooms
