@@ -1,33 +1,38 @@
-package io.kdot.app.ui.onboarding
+package io.kdot.app.utils
+
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.kdot.app.designsystem.Resources
+import io.github.aakira.napier.Napier
+import io.ktor.client.HttpClient
+import io.ktor.http.Url
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-/*import net.folivo.trixnity.olm.OlmAccount
+import net.folivo.trixnity.clientserverapi.client.MatrixClientServerApiClientImpl
+import net.folivo.trixnity.olm.OlmAccount
 import net.folivo.trixnity.olm.OlmInboundGroupSession
 import net.folivo.trixnity.olm.OlmOutboundGroupSession
 import net.folivo.trixnity.olm.OlmPkDecryption
 import net.folivo.trixnity.olm.OlmPkEncryption
 import net.folivo.trixnity.olm.OlmPkSigning
 import net.folivo.trixnity.olm.OlmSession
-import net.folivo.trixnity.olm.OlmUtility*/
+import net.folivo.trixnity.olm.OlmUtility
 
-class OnBoardingViewModel : ViewModel() {
-
-    val onBoardingState = OnBoardingState(applicationName = Resources.String.title_app_name)
+class OlmUtils {
+    val viewModelScope = CoroutineScope(Job())
 
 
     fun olmTesting() = viewModelScope.launch {
-       /* testAccountCreation()
-//        testOutboundSessionCreation()
+        testAccountCreation()
+        testOutboundSessionCreation()
         testInboundSessionCreation()
         testGroupSessionEncryptionDecryption()
         testPkEncryptionDecryption()
         testPkSigning()
-        testUtilityFunctions()*/
+        testUtilityFunctions()
     }
-/*
+
     private suspend fun testAccountCreation() {
         val aliceAccount = OlmAccount.create()
         val bobAccount = OlmAccount.create()
@@ -47,8 +52,7 @@ class OnBoardingViewModel : ViewModel() {
 
 
         val bobInboundSession = OlmSession.createInbound(
-            bobAccount,
-            bobAccount.oneTimeKeys.curve25519.values.first()
+            bobAccount, bobAccount.oneTimeKeys.curve25519.values.first()
         )
 
         val message: String = bobInboundSession.decrypt(aliceOutBoundMessage)
@@ -63,8 +67,7 @@ class OnBoardingViewModel : ViewModel() {
         val bobOutBoundMessage = bobOutboundSession.encrypt(bobToAliceMessage)
 
         val aliceInboundSession = OlmSession.createInbound(
-            aliceAccount,
-            aliceAccount.oneTimeKeys.curve25519.values.first()
+            aliceAccount, aliceAccount.oneTimeKeys.curve25519.values.first()
         )
         val message2 = aliceInboundSession.decrypt(bobOutBoundMessage)
         val res2 = bobToAliceMessage == message2
@@ -86,9 +89,7 @@ class OnBoardingViewModel : ViewModel() {
     private suspend fun testInboundSessionCreation() {
         val account = OlmAccount.create()
         val outbound = OlmSession.createOutbound(
-            account,
-            account.identityKeys.curve25519,
-            account.oneTimeKeys.curve25519.values.first()
+            account, account.identityKeys.curve25519, account.oneTimeKeys.curve25519.values.first()
         )
         val message = outbound.encrypt("Secret message")
 
@@ -135,5 +136,18 @@ class OnBoardingViewModel : ViewModel() {
         } catch (e: Exception) {
             println("Signature verification failed: ${e.message}")
         }
-    }*/
+    }
+
+    fun register() = viewModelScope.launch {
+        MatrixClientServerApiClientImpl(
+//            Url("https://matrix.org"),
+            Url("https://matrix-client.matrix.org"),
+            httpClientEngine = HttpClient().engine,
+            httpClientConfig = null
+        ).authentication.register().onSuccess {
+            Napier.d("Wellknown Succes: ${it}")
+        }.onFailure {
+            Napier.d("Wellknown error: ${it}")
+        }
+    }
 }

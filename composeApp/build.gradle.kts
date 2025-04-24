@@ -74,6 +74,7 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.ktor.client.core)
             implementation(libs.io.coil)
+            implementation(libs.logging.napier)
 
         }
 
@@ -146,6 +147,7 @@ room {
 }
 
 dependencies {
+    testImplementation(libs.junit.jupiter)
     debugImplementation(compose.uiTooling)
     ksp(libs.androidx.room.compiler)
 }

@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.kdot.app.designsystem.Resources
 import io.kdot.app.designsystem.atomic.atom.ElementLogoAtomSize
 import io.kdot.app.designsystem.atomic.atom.KDotLogoAtom
@@ -31,10 +30,8 @@ fun OnBoardingScreen(
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
 ) {
-    val vm = viewModel { OnBoardingViewModel() }
-    val onBoardingState = vm.onBoardingState
+
     OnBoardingView(
-        state = onBoardingState,
         onSignIn = onSignIn,
         onCreateAccount = onCreateAccount,
     )
@@ -43,7 +40,6 @@ fun OnBoardingScreen(
 
 @Composable
 fun OnBoardingView(
-    state: OnBoardingState,
     onSignIn: () -> Unit,
     onCreateAccount: () -> Unit,
 ) {
@@ -54,9 +50,7 @@ fun OnBoardingView(
             modifier = Modifier.weight(1f).fillMaxWidth(),
             horizontalAlignment = CenterHorizontally,
         ) {
-            OnBoardingContent(
-                state = state,
-            )
+            OnBoardingContent()
         }
 
         Box(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -70,9 +64,7 @@ fun OnBoardingView(
 }
 
 @Composable
-private fun OnBoardingContent(
-    state: OnBoardingState,
-) {
+private fun OnBoardingContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -98,7 +90,7 @@ private fun OnBoardingContent(
                 Text(
                     text = stringResource(
                         Resources.String.screen_onboarding_welcome_title,
-                        stringResource(state.applicationName)
+                        stringResource(Resources.String.title_app_name)
                     ), style = MaterialTheme.typography.headlineLarge, textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))

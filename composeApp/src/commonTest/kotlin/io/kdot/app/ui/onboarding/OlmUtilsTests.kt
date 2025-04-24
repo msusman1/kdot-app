@@ -1,18 +1,16 @@
-//import io.ktor.utils.io.core.toByteArray
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
-/*import net.folivo.trixnity.crypto.core.decryptAes256Ctr
+import net.folivo.trixnity.crypto.core.decryptAes256Ctr
 import net.folivo.trixnity.crypto.core.encryptAes256Ctr
 import net.folivo.trixnity.olm.OlmAccount
 import net.folivo.trixnity.olm.OlmInboundGroupSession
 import net.folivo.trixnity.olm.OlmOutboundGroupSession
 import net.folivo.trixnity.olm.OlmSession
 import net.folivo.trixnity.utils.toByteArray
-import net.folivo.trixnity.utils.toByteArrayFlow*//*
+import net.folivo.trixnity.utils.toByteArrayFlow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class OnBoardingViewModelTest {
+class OlmUtilsTest {
 
 
     @Test
@@ -81,16 +79,16 @@ class OnBoardingViewModelTest {
 
     @Test
     fun shouldEncryptAndDecrypt() = runTest {
-          val key = ByteArray(32) { (it + 1).toByte() }
-          val nonce = ByteArray(8) { (it + 1).toByte() }
-          val initialisationVector = nonce + ByteArray(7) + ByteArray(1) { (0xff).toByte() }
+        val key = ByteArray(32) { (it + 1).toByte() }
+        val nonce = ByteArray(8) { (it + 1).toByte() }
+        val initialisationVector = nonce + ByteArray(7) + ByteArray(1) { (0xff).toByte() }
 
-        val fina= "hello".encodeToByteArray().toByteArrayFlow()
+        val fina = "hello".encodeToByteArray().toByteArrayFlow()
             .encryptAes256Ctr(key, initialisationVector)
             .decryptAes256Ctr(key, initialisationVector).toByteArray()
             .decodeToString()
         assertEquals("hello", fina)
 
-    }*/
+    }
 
-//}
+}
