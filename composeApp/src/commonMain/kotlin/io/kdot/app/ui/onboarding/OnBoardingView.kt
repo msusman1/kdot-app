@@ -24,16 +24,17 @@ import io.kdot.app.designsystem.atomic.atom.ElementLogoAtomSize
 import io.kdot.app.designsystem.atomic.atom.KDotLogoAtom
 import io.kdot.app.designsystem.atomic.molecule.ButtonColumnMolecule
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OnBoardingScreen(
     onSignIn: () -> Unit,
-    onCreateAccount: () -> Unit,
+    vm: OnboardingViewModel = koinViewModel()
 ) {
 
     OnBoardingView(
         onSignIn = onSignIn,
-        onCreateAccount = onCreateAccount,
+        onCreateAccount = vm::onSignUpClicked,
     )
 }
 

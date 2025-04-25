@@ -49,6 +49,7 @@ kotlin {
             implementation(libs.sqlite.bundled)
             implementation(libs.trixnity.client.repository.room)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.browser)
         }
 
         commonMain.dependencies {
@@ -111,6 +112,7 @@ kotlin {
             implementation(libs.trixnity.client.media.opfs)
             implementation(libs.trixnity.client.repository.indexeddb)
             implementation(libs.ktor.client.js)
+            implementation(npm("copy-webpack-plugin", libs.versions.copyWebpackPlugin.get()))
         }
     }
 }
@@ -147,7 +149,6 @@ room {
 }
 
 dependencies {
-    testImplementation(libs.junit.jupiter)
     debugImplementation(compose.uiTooling)
     ksp(libs.androidx.room.compiler)
 }

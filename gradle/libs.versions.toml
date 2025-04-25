@@ -16,21 +16,22 @@ junit = "4.13.2"
 kotlin = "2.1.20"
 kotlinx-coroutines = "1.10.2"
 multiplatform-settings = "1.2.0"
-trixnityVersion = "4.15.0"
+trixnityVersion = "4.15.1"
 jetbrainsKotlinJvm = "2.1.10"
 compose-navigation = "2.8.0-alpha10"
 serialization = "1.8.0"
 lifecycle-viewmodel-compose = "2.8.3"
-datatore = "1.1.4"
+datatore = "1.1.5"
 koin = "4.0.4"
 okio = "3.10.2"
 ktor = "3.1.2"
 ksp = "2.1.20-2.0.0"
-room = "2.7.0"
+room = "2.7.1"
 sqlite = "2.5.0"
 coil = "3.1.0"
 napier = "2.7.1"
-junitJupiter = "5.8.1"
+androidxBrowser = "1.8.0"
+copyWebpackPlugin = "12.0.2"
 
 
 
@@ -85,7 +86,7 @@ ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 io-coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 logging-napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

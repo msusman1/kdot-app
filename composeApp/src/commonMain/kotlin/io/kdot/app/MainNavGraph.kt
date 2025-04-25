@@ -34,9 +34,7 @@ fun MainNavGraph() {
                 onSignIn = {
                     navController.navigate(Login)
                 },
-                onCreateAccount = {
-                    navController.navigate(Register)
-                }
+
             )
         }
         composable<Login> {
@@ -62,8 +60,6 @@ object Onboarding
 @Serializable
 object Login
 
-@Serializable
-object Register
 
 @Serializable
 object Rooms
