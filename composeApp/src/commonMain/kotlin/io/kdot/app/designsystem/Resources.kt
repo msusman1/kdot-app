@@ -20,6 +20,15 @@ import kdotapp.composeapp.generated.resources.screen_login_subtitle
 import kdotapp.composeapp.generated.resources.screen_onboarding_welcome_title
 import kdotapp.composeapp.generated.resources.screen_onboarding_welcome_message
 import kdotapp.composeapp.generated.resources.screen_onboarding_sign_in_manually
+import kdotapp.composeapp.generated.resources.unencrypted
+import kdotapp.composeapp.generated.resources.public
+import kdotapp.composeapp.generated.resources.join
+import kdotapp.composeapp.generated.resources.avatar
+import kdotapp.composeapp.generated.resources.chats
+import kdotapp.composeapp.generated.resources.online
+import kdotapp.composeapp.generated.resources.offline
+import kdotapp.composeapp.generated.resources.search
+import kdotapp.composeapp.generated.resources.unavailable
 
 object Resources {
     object Icon {
@@ -47,6 +56,15 @@ object Resources {
         val screen_onboarding_welcome_message = Res.string.screen_onboarding_welcome_message
         val screen_onboarding_sign_in_manually = Res.string.screen_onboarding_sign_in_manually
         val screen_onboarding_sign_up = Res.string.screen_onboarding_sign_up
+        val unencrypted = Res.string.unencrypted
+        val public = Res.string.public
+        val join = Res.string.join
+        val avatar = Res.string.avatar
+        val online = Res.string.online
+        val offline = Res.string.offline
+        val unavailable = Res.string.unavailable
+        val chats = Res.string.chats
+        val search = Res.string.search
     }
 
 }

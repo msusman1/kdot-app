@@ -27,5 +27,14 @@
     <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>
     <string name="screen_login_error_deactivated_account">"This account has been deactivated."</string>
     <string name="screen_account_provider_signup_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
+    <string name="unencrypted">Unencrypted</string>
+    <string name="public">Public</string>
+    <string name="join">Join</string>
+    <string name="avatar">Avatar</string>
+    <string name="online">online</string>
+    <string name="offline">offline</string>
+    <string name="unavailable">unavailable</string>
+    <string name="chats">Chats</string>
+    <string name="search">Search</string>
 
 </resources>

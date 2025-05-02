@@ -67,3 +67,24 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFF7BDD3C)
+
+
+class AppColorsLight : AppColors {
+    override val success: Color = Color(0xFF519325)
+    override val presenceOnline: Color = Color(0xFF519325)
+    override val presenceOffline: Color = Color(0xFF777777)
+    override val presenceUnavailable: Color = Color(0xFFFB5607)
+    override val verificationTrusted: Color = Color(0xFF519325)
+    override val verificationUntrusted: Color = Color(0xFFFB5607)
+    override val verificationNeutral: Color = Color(0xFF777777)
+}
+
+class AppColorsDark : AppColors {
+    override val success: Color = Color(0xFF51CC25)
+    override val presenceOnline: Color = Color(0xFF51CC25)
+    override val presenceOffline: Color = Color(0xFF777777)
+    override val presenceUnavailable: Color = Color(0xFFFF5607)
+    override val verificationTrusted: Color = Color(0xFF51CC25)
+    override val verificationUntrusted: Color = Color(0xFFFB5607)
+    override val verificationNeutral: Color = Color(0xFF777777)
+}

@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -71,15 +72,20 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+
 @Composable
 fun KDotTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorToUse = if (darkTheme) DarkColors else LightColors
-    MaterialTheme(
-        colorScheme = colorToUse,
-        content = content
-    )
+    val appColors = if (darkTheme) AppColorsDark() else AppColorsLight()
+    CompositionLocalProvider(LocalAppColors provides appColors) {
+        val colorToUse = if (darkTheme) DarkColors else LightColors
+        MaterialTheme(
+            colorScheme = colorToUse,
+            content = content
+        )
+    }
+
 
 }

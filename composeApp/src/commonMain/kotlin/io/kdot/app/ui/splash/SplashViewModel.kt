@@ -11,7 +11,7 @@ import net.folivo.trixnity.client.MatrixClient
 
 sealed class SplashUiState {
     data object Loading : SplashUiState()
-    data  object NavigateToRooms : SplashUiState()
+    data object NavigateToRooms : SplashUiState()
     data object NavigateToOnboarding : SplashUiState()
 }
 
