@@ -1,4 +1,4 @@
-package io.kdot.app.ui.rooms.filter
+package io.kdot.app.ui.roomlist.filter
 
 enum class RoomFilter(val readable: String) {
     Unread("Unread"),

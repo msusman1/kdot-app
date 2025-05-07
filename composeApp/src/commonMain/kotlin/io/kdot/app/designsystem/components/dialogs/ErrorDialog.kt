@@ -1,51 +1,62 @@
+/*
+ * Copyright 2023, 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
 package io.kdot.app.designsystem.components.dialogs
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import kdotapp.composeapp.generated.resources.Res
-import kdotapp.composeapp.generated.resources.action_ok
-import kdotapp.composeapp.generated.resources.dialog_title_error
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.DialogProperties
+import io.kdot.app.designsystem.Resources
+import io.kdot.app.designsystem.theme.components.SimpleAlertDialogContent
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ErrorDialog(
     content: String,
+    onSubmit: () -> Unit,
+    modifier: Modifier = Modifier,
     title: String? = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit = onSubmit,
     canDismiss: Boolean = true,
 ) {
-
-    AlertDialog(
-
-        title = title?.let { { Text(text = title) } },
-        text = {
-            Text(text = content)
-        },
-        onDismissRequest = {
-            if (canDismiss) {
-                onDismiss()
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onDismiss()
-                }
-            ) {
-                Text(submitText)
-            }
-        },
-        dismissButton = null
-    )
-
-
+    BasicAlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(dismissOnClickOutside = canDismiss, dismissOnBackPress = canDismiss)
+    ) {
+        ErrorDialogContent(
+            title = title,
+            content = content,
+            submitText = submitText,
+            onSubmitClick = onSubmit,
+        )
+    }
 }
 
+@Composable
+private fun ErrorDialogContent(
+    content: String,
+    onSubmitClick: () -> Unit,
+    title: String? = ErrorDialogDefaults.title,
+    submitText: String = ErrorDialogDefaults.submitText,
+) {
+    SimpleAlertDialogContent(
+        title = title,
+        content = content,
+        submitText = submitText,
+        onSubmitClick = onSubmitClick,
+    )
+}
 
 object ErrorDialogDefaults {
-    val title: String @Composable get() = stringResource(Res.string.dialog_title_error)
-    val submitText: String @Composable get() = stringResource(Res.string.action_ok)
+    val title: String @Composable get() = stringResource(Resources.String.dialog_title_error)
+    val submitText: String @Composable get() = stringResource(Resources.String.action_ok)
 }

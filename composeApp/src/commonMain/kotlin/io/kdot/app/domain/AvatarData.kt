@@ -1,27 +1,64 @@
 package io.kdot.app.domain
 
+import androidx.compose.runtime.Immutable
+import io.kdot.app.designsystem.components.avatar.AvatarSize
+
+
+@Immutable
 data class AvatarData(
-    val displayName: String?,
-    val avatar: ByteArray
+    val id: String,
+    val name: String?,
+    val url: String? = null,
+    val size: AvatarSize,
 ) {
-    val initials: String
-        get() = displayName?.firstOrNull()?.uppercase() ?: "#"
+    val initial by lazy {
+        // For roomIds, use "#" as initial
+        (name?.takeIf { it.isNotBlank() } ?: id.takeIf { !it.startsWith("!") } ?: "#")
+            .let { dn ->
+                var startIndex = 0
+                val initial = dn[startIndex]
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
-        other as AvatarData
+                if (initial in listOf('@', '#', '+') && dn.length > 1) {
+                    startIndex++
+                }
 
-        if (displayName != other.displayName) return false
-        if (!avatar.contentEquals(other.avatar)) return false
+                var next = dn[startIndex]
 
-        return true
+                // LEFT-TO-RIGHT MARK
+                if (dn.length >= 2 && 0x200e == next.code) {
+                    startIndex++
+                    next = dn[startIndex]
+                }
+
+                while (next.isWhitespace()) {
+                    if (dn.length > startIndex + 1) {
+                        startIndex++
+                        next = dn[startIndex]
+                    } else {
+                        break
+                    }
+                }
+/*
+
+                val fullCharacterIterator = BreakIterator.getCharacterInstance()
+                fullCharacterIterator.setText(dn)
+                val glyphBoundary = tryOrNull { fullCharacterIterator.following(startIndex) }
+                    ?.takeIf { it in startIndex..dn.length }
+*/
+
+                when {
+                    // Use the found boundary
+//                    glyphBoundary != null -> dn.substring(startIndex, glyphBoundary)
+                    // If no boundary was found, default to the next char if possible
+                    startIndex + 1 < dn.length -> dn.substring(startIndex, startIndex + 1)
+                    // Return a fallback character otherwise
+                    else -> "#"
+                }
+            }
+            .uppercase()
     }
+}
 
-    override fun hashCode(): Int {
-        var result = displayName.hashCode()
-        result = 31 * result + avatar.contentHashCode()
-        return result
-    }
-
+fun AvatarData.getBestName(): String {
+    return name?.takeIf { it.isNotEmpty() } ?: id
 }

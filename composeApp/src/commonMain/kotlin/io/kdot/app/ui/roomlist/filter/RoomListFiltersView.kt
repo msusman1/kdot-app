@@ -1,4 +1,4 @@
-package io.kdot.app.ui.rooms.filter
+package io.kdot.app.ui.roomlist.filter
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -31,9 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
-fun RoomFilterView(
+fun RoomListFiltersView(
     roomFilterStateHolder: RoomFilterStateHolder,
-
     modifier: Modifier = Modifier
 ) {
     val roomFilterState by roomFilterStateHolder.filterSelectionStates.collectAsStateWithLifecycle()

@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.kdot.app.ui.login.LoginScreen
 import io.kdot.app.ui.onboarding.OnBoardingScreen
-import io.kdot.app.ui.rooms.RoomsScreen
+import io.kdot.app.ui.roomlist.RoomListScreen
 import io.kdot.app.ui.splash.SplashScreen
 import kotlinx.serialization.Serializable
 
@@ -16,18 +16,15 @@ fun MainNavGraph() {
 
     NavHost(navController = navController, startDestination = Splash) {
         composable<Splash> {
-            SplashScreen(
-                onNavigateToRooms = {
-                    navController.navigate(Rooms) {
-                        popUpTo(Splash) { inclusive = true }
-                    }
-                },
-                onNavigateToOnboarding = {
-                    navController.navigate(Onboarding) {
-                        popUpTo(Splash) { inclusive = true }
-                    }
+            SplashScreen(onNavigateToRooms = {
+                navController.navigate(Rooms) {
+                    popUpTo(Splash) { inclusive = true }
                 }
-            )
+            }, onNavigateToOnboarding = {
+                navController.navigate(Onboarding) {
+                    popUpTo(Splash) { inclusive = true }
+                }
+            })
         }
         composable<Onboarding> {
             OnBoardingScreen(
@@ -35,17 +32,27 @@ fun MainNavGraph() {
                     navController.navigate(Login)
                 },
 
-            )
+                )
         }
         composable<Login> {
-            LoginScreen(
-                onBackClick = { navController.navigateUp() },
-                onLoginSuccess = {
-                    navController.navigate(Rooms)
-                })
+            LoginScreen(onBackClick = { navController.navigateUp() }, onLoginSuccess = {
+                navController.navigate(Rooms)
+            })
         }
         composable<Rooms> {
-            RoomsScreen()
+            RoomListScreen(onRoomClick = { roomId ->
+                navController.navigate("room/$roomId")
+            }, onSettingsClick = {
+                navController.navigate("settings")
+            }, onSetUpRecoveryClick = {
+                navController.navigate("recovery/setup")
+            }, onConfirmRecoveryKeyClick = {}, onCreateRoomClick = {
+                navController.navigate("room/create")
+            }, onRoomSettingsClick = { roomId ->
+                navController.navigate("room/$roomId/settings")
+            }, onRoomDirectorySearchClick = {
+                navController.navigate("room/directory/search")
+            })
         }
     }
 

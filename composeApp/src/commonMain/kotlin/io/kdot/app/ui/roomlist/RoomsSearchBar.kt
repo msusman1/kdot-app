@@ -1,4 +1,4 @@
-package io.kdot.app.ui.rooms
+package io.kdot.app.ui.roomlist
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape

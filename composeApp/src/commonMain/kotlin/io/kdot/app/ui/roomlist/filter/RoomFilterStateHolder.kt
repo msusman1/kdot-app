@@ -1,4 +1,4 @@
-package io.kdot.app.ui.rooms.filter
+package io.kdot.app.ui.roomlist.filter
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

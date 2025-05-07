@@ -1,11 +1,15 @@
-package io.kdot.app.ui.rooms
+package io.kdot.app.ui.roomlist
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.kdot.app.designsystem.common.avatarSize
+import io.kdot.app.designsystem.components.avatar.AvatarSize
+import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
 import io.kdot.app.domain.AvatarData
+import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.matrix.MatrixClientProvider
-import io.kdot.app.ui.rooms.filter.RoomFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomFilterStateHolder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,12 +31,26 @@ import net.folivo.trixnity.core.model.RoomId
 import net.folivo.trixnity.utils.toByteArray
 
 
-class RoomsViewModel(
+class RoomListViewModel(
     private val clientProvider: MatrixClientProvider
 ) : ViewModel() {
     val roomFilterStateHolder = RoomFilterStateHolder()
+    val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    val snackbarDispatcher = SnackbarDispatcher()
+    val snackbarMessage = snackbarDispatcher.snackbarMessage.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null
+    )
+    private val _roomListState = MutableStateFlow(
+        RoomListState(
+
+        )
+    )
+    val roomListState: StateFlow<RoomListState> = _roomListState.asStateFlow()
+
     init {
         initializeSync()
     }
@@ -51,7 +69,10 @@ class RoomsViewModel(
     val avatarData: StateFlow<AvatarData?> = combine(userAvatar, displayName) { avatar, name ->
         avatar?.let {
             AvatarData(
-                displayName = name, avatar = avatar
+                id = "",
+                name = name,
+                url = null,
+                size = AvatarSize.RoomListItem
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
