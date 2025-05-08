@@ -9,8 +9,6 @@ import kdotapp.composeapp.generated.resources.action_continue
 import kdotapp.composeapp.generated.resources.action_decline
 import kdotapp.composeapp.generated.resources.app_logo
 import kdotapp.composeapp.generated.resources.ic_compound_mention
-import kdotapp.composeapp.generated.resources.ic_compound_video_call_solid
-import kdotapp.composeapp.generated.resources.ic_compound_notifications_off_solid
 import kdotapp.composeapp.generated.resources.avatar
 import kdotapp.composeapp.generated.resources.chats
 import kdotapp.composeapp.generated.resources.common_no_room_name
@@ -37,7 +35,6 @@ import kdotapp.composeapp.generated.resources.search
 import kdotapp.composeapp.generated.resources.title_app_name
 import kdotapp.composeapp.generated.resources.unavailable
 import kdotapp.composeapp.generated.resources.unencrypted
-import kdotapp.composeapp.generated.resources.ic_compound_offline
 import kdotapp.composeapp.generated.resources.common_offline
 import kdotapp.composeapp.generated.resources.screen_roomlist_mark_as_read
 import kdotapp.composeapp.generated.resources.screen_roomlist_mark_as_unread
@@ -46,7 +43,6 @@ import kdotapp.composeapp.generated.resources.common_settings
 import kdotapp.composeapp.generated.resources.action_leave_conversation
 import kdotapp.composeapp.generated.resources.action_leave_room
 import kdotapp.composeapp.generated.resources.action_ok
-import kdotapp.composeapp.generated.resources.common_settings
 import kdotapp.composeapp.generated.resources.ic_compound_leave
 import kdotapp.composeapp.generated.resources.action_cancel
 import kdotapp.composeapp.generated.resources.leave_conversation_alert_subtitle
@@ -57,15 +53,26 @@ import kdotapp.composeapp.generated.resources.common_leaving_room
 import kdotapp.composeapp.generated.resources.action_leave
 import kdotapp.composeapp.generated.resources.screen_roomlist_main_space_title
 import kdotapp.composeapp.generated.resources.screen_roomlist_a11y_create_message
+import kdotapp.composeapp.generated.resources.screen_roomlist_room_directory_button_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_unreads_empty_state_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_people_empty_state_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_rooms_empty_state_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_favourites_empty_state_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_favourites_empty_state_subtitle
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_invites_empty_state_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_mixed_empty_state_subtitle
+import kdotapp.composeapp.generated.resources.screen_roomlist_filter_mixed_empty_state_title
+import kdotapp.composeapp.generated.resources.ic_compound_compose
+import kdotapp.composeapp.generated.resources.screen_roomlist_empty_title
+import kdotapp.composeapp.generated.resources.screen_roomlist_empty_message
+import kdotapp.composeapp.generated.resources.action_start_chat
 
 object Resources {
     object Icon {
         val app_logo = Res.drawable.app_logo
-        val video_call_solid = Res.drawable.ic_compound_video_call_solid
-        val ic_compound_notifications_off_solid = Res.drawable.ic_compound_notifications_off_solid
         val ic_compound_mention = Res.drawable.ic_compound_mention
-        val ic_compound_offline = Res.drawable.ic_compound_offline
         val ic_compound_leave = Res.drawable.ic_compound_leave
+        val ic_compound_compose = Res.drawable.ic_compound_compose
     }
 
     object String {
@@ -104,22 +111,43 @@ object Resources {
         val action_accept = Res.string.action_accept
         val action_decline = Res.string.action_decline
         val common_offline = Res.string.common_offline
-        val screen_roomlist_mark_as_read= Res.string.screen_roomlist_mark_as_read
-        val screen_roomlist_mark_as_unread= Res.string.screen_roomlist_mark_as_unread
-        val common_favourite= Res.string.common_favourite
-        val action_leave_conversation= Res.string.action_leave_conversation
-        val action_leave_room= Res.string.action_leave_room
-        val common_settings= Res.string.common_settings
-        val action_ok= Res.string.action_ok
-        val action_cancel= Res.string.action_cancel
-       val leave_conversation_alert_subtitle = Res.string.leave_conversation_alert_subtitle
-       val leave_room_alert_empty_subtitle = Res.string.leave_room_alert_empty_subtitle
-       val leave_room_alert_private_subtitle = Res.string.leave_room_alert_private_subtitle
-       val leave_room_alert_subtitle = Res.string.leave_room_alert_subtitle
-       val common_leaving_room = Res.string.common_leaving_room
-       val action_leave = Res.string.action_leave
-       val screen_roomlist_main_space_title = Res.string.screen_roomlist_main_space_title
-       val screen_roomlist_a11y_create_message = Res.string.screen_roomlist_a11y_create_message
+        val screen_roomlist_mark_as_read = Res.string.screen_roomlist_mark_as_read
+        val screen_roomlist_mark_as_unread = Res.string.screen_roomlist_mark_as_unread
+        val common_favourite = Res.string.common_favourite
+        val action_leave_conversation = Res.string.action_leave_conversation
+        val action_leave_room = Res.string.action_leave_room
+        val common_settings = Res.string.common_settings
+        val action_ok = Res.string.action_ok
+        val action_cancel = Res.string.action_cancel
+        val leave_conversation_alert_subtitle = Res.string.leave_conversation_alert_subtitle
+        val leave_room_alert_empty_subtitle = Res.string.leave_room_alert_empty_subtitle
+        val leave_room_alert_private_subtitle = Res.string.leave_room_alert_private_subtitle
+        val leave_room_alert_subtitle = Res.string.leave_room_alert_subtitle
+        val common_leaving_room = Res.string.common_leaving_room
+        val action_leave = Res.string.action_leave
+        val screen_roomlist_main_space_title = Res.string.screen_roomlist_main_space_title
+        val screen_roomlist_a11y_create_message = Res.string.screen_roomlist_a11y_create_message
+        val screen_roomlist_room_directory_button_title =
+            Res.string.screen_roomlist_room_directory_button_title
+        val screen_roomlist_filter_unreads_empty_state_title =
+            Res.string.screen_roomlist_filter_unreads_empty_state_title
+        val screen_roomlist_filter_people_empty_state_title =
+            Res.string.screen_roomlist_filter_people_empty_state_title
+        val screen_roomlist_filter_rooms_empty_state_title =
+            Res.string.screen_roomlist_filter_rooms_empty_state_title
+        val screen_roomlist_filter_favourites_empty_state_title =
+            Res.string.screen_roomlist_filter_favourites_empty_state_title
+        val screen_roomlist_filter_favourites_empty_state_subtitle =
+            Res.string.screen_roomlist_filter_favourites_empty_state_subtitle
+        val screen_roomlist_filter_invites_empty_state_title =
+            Res.string.screen_roomlist_filter_invites_empty_state_title
+        val screen_roomlist_filter_mixed_empty_state_subtitle =
+            Res.string.screen_roomlist_filter_mixed_empty_state_subtitle
+        val screen_roomlist_filter_mixed_empty_state_title = Res.string.screen_roomlist_filter_mixed_empty_state_title
+        val screen_roomlist_empty_title = Res.string.screen_roomlist_empty_title
+        val screen_roomlist_empty_message = Res.string.screen_roomlist_empty_message
+        val action_start_chat = Res.string.action_start_chat
+
     }
 
 }

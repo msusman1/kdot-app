@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VideoCall
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +52,7 @@ import io.kdot.app.ui.theme.appColors
 import io.kdot.app.ui.theme.appTypography
 import io.kdot.app.ui.theme.unreadIndicator
 import net.folivo.trixnity.core.model.Mention
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 internal val minHeight = 84.dp
@@ -345,30 +348,22 @@ private fun InviteButtonsRow(
 private fun OnGoingCallIcon(
     color: Color,
 ) {
+
     Icon(
         modifier = Modifier.size(16.dp),
-        imageVector = Resources.Icon.video_call_solid,
+        imageVector = Icons.Default.VideoCall,
         contentDescription = null,
         tint = color,
     )
 }
 
-@Composable
-private fun NotificationOffIndicatorAtom() {
-    Icon(
-        modifier = Modifier.size(16.dp),
-        contentDescription = null,
-        imageVector = Resources.Icon.ic_compound_notifications_off_solid,
-        tint = MaterialTheme.appColors.iconQuaternary,
-    )
-}
 
 @Composable
 private fun MentionIndicatorAtom() {
     Icon(
         modifier = Modifier.size(16.dp),
         contentDescription = null,
-        imageVector = Resources.Icon.ic_compound_mention,
+        painter = painterResource(Resources.Icon.ic_compound_mention),
         tint = MaterialTheme.appColors.unreadIndicator,
     )
 }

@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.OfflinePin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,7 +46,7 @@ internal fun Indicator(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = Resources.Icon.ic_compound_offline,
+            imageVector = Icons.Default.OfflinePin,
             contentDescription = null,
             tint = MaterialTheme.appColors.iconPrimary,
             modifier = Modifier.size(16.sp.toDp()),

@@ -178,18 +178,6 @@ private fun RoomListModalBottomSheetContent(
             ),
             style = ListItemStyle.Destructive,
         )
-        if (contextMenu.eventCacheFeatureFlagEnabled) {
-            ListItem(
-                headlineContent = {
-                    Text(text = "Clear cache for this room")
-                },
-                modifier = Modifier.clickable { onClearCacheRoomClick() },
-                leadingContent = ListItemContent.Icon(
-                    iconSource = IconSource.Vector(Icons.Default.Delete)
-                ),
-                style = ListItemStyle.Primary,
-            )
-        }
     }
 }
 

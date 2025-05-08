@@ -240,6 +240,15 @@ val AppColors.pinnedMessageBannerIndicator
 val AppColors.pinnedMessageBannerBorder
     get() = if (isLight) LightColorTokens.colorAlphaGray400 else DarkColorTokens.colorAlphaGray400
 
+val AppColors.superButtonShaderColors
+    get() = if (isLight)  listOf(
+        LightColorTokens.colorBlue900,
+        LightColorTokens.colorGreen1100,
+    ) else listOf(
+        DarkColorTokens.colorBlue900,
+        DarkColorTokens.colorGreen1100,
+    )
+
 
 val MaterialTheme.appTypography
     get() = AppTypography

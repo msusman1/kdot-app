@@ -1,6 +1,8 @@
 package io.kdot.app.ui.roomlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -27,7 +29,8 @@ import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.features.leaveroom.LeaveRoomView
 import io.kdot.app.features.networkmonitor.ConnectivityIndicatorContainer
 import io.kdot.app.ui.roomlist.components.RoomListTopBar
-import io.kdot.app.ui.roomlist.filter.RoomFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
+import io.kdot.app.ui.roomlist.search.RoomListSearchView
 import io.kdot.app.ui.theme.appColors
 import net.folivo.trixnity.core.model.RoomId
 import org.jetbrains.compose.resources.stringResource
@@ -38,26 +41,22 @@ fun RoomListScreen(
     viewModel: RoomListViewModel = koinViewModel(),
     onRoomClick: (RoomId) -> Unit,
     onSettingsClick: () -> Unit,
-    onSetUpRecoveryClick: () -> Unit,
-    onConfirmRecoveryKeyClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onRoomDirectorySearchClick: () -> Unit,
 ) {
     val roomListState by viewModel.roomListState.collectAsState()
-    val roomFilterStateHolder = viewModel.roomFilterStateHolder
+    val roomFilterStateHolder = viewModel.roomListFilterStateHolder
     val snackbarMessage by viewModel.snackbarMessage.collectAsState()
     val leaveRoomStateHolder = viewModel.leaveRoomStateHolder
 
     RoomListScreenInternal(
         state = roomListState,
         snackbarMessage = snackbarMessage,
-        roomFilterStateHolder = roomFilterStateHolder,
+        roomListFilterStateHolder = roomFilterStateHolder,
         leaveRoomStateHolder = leaveRoomStateHolder,
         onRoomClick = onRoomClick,
         onSettingsClick = onSettingsClick,
-        onSetUpRecoveryClick = onSetUpRecoveryClick,
-        onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
         onCreateRoomClick = onCreateRoomClick,
         onRoomSettingsClick = onRoomSettingsClick,
         onRoomDirectorySearchClick = onRoomDirectorySearchClick,
@@ -68,12 +67,10 @@ fun RoomListScreen(
 fun RoomListScreenInternal(
     state: RoomListState,
     snackbarMessage: SnackbarMessage?,
-    roomFilterStateHolder: RoomFilterStateHolder,
+    roomListFilterStateHolder: RoomListFilterStateHolder,
     leaveRoomStateHolder: LeaveRoomStateHolder,
     onRoomClick: (RoomId) -> Unit,
     onSettingsClick: () -> Unit,
-    onSetUpRecoveryClick: () -> Unit,
-    onConfirmRecoveryKeyClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onRoomDirectorySearchClick: () -> Unit,
@@ -97,9 +94,7 @@ fun RoomListScreenInternal(
             RoomListScaffold(
                 state = state,
                 snackbarMessage = snackbarMessage,
-                roomFilterStateHolder = roomFilterStateHolder,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                roomListFilterStateHolder = roomListFilterStateHolder,
                 onRoomClick = onRoomClick,
                 onOpenSettings = onSettingsClick,
                 onCreateRoomClick = onCreateRoomClick,
@@ -115,7 +110,7 @@ fun RoomListScreenInternal(
                     .statusBarsPadding()
                     .padding(top = topPadding)
                     .fillMaxSize()
-                    .background(ElementTheme.colors.bgCanvasDefault)
+                    .background(MaterialTheme.appColors.bgCanvasDefault)
             )
 
         }
@@ -129,10 +124,8 @@ fun RoomListScreenInternal(
 @Composable
 private fun RoomListScaffold(
     state: RoomListState,
-    roomFilterStateHolder: RoomFilterStateHolder,
+    roomListFilterStateHolder: RoomListFilterStateHolder,
     snackbarMessage: SnackbarMessage?,
-    onSetUpRecoveryClick: () -> Unit,
-    onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomId) -> Unit,
     onOpenSettings: () -> Unit,
     onCreateRoomClick: () -> Unit,
@@ -156,7 +149,7 @@ private fun RoomListScaffold(
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayFilters,
-                roomFilterStateHolder = roomFilterStateHolder
+                roomListFilterStateHolder = roomListFilterStateHolder
             )
         },
         content = { padding ->
@@ -164,8 +157,6 @@ private fun RoomListScaffold(
                 contentState = state.contentState,
                 filtersState = state.filtersState,
                 eventSink = state.eventSink,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = ::onRoomClick,
                 onCreateRoomClick = onCreateRoomClick,
                 modifier = Modifier
@@ -174,7 +165,6 @@ private fun RoomListScaffold(
             )
         },
         floatingActionButton = {
-
             FloatingActionButton(
                 containerColor = MaterialTheme.appColors.iconPrimary,
                 onClick = onCreateRoomClick

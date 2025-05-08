@@ -12,11 +12,7 @@ data class RoomListState(
     val showAvatarIndicator: Boolean,
     val hasNetworkConnection: Boolean,
     val contextMenu: ContextMenu,
-    val filtersState: RoomListFiltersState,
-    val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
-    val acceptDeclineInviteState: AcceptDeclineInviteState,
-    val directLogoutState: DirectLogoutState,
     val eventSink: (RoomListEvents) -> Unit,
 ){
     val displayFilters = contentState is RoomListContentState.Rooms
@@ -30,7 +26,6 @@ data class RoomListState(
             val isDm: Boolean,
             val isFavorite: Boolean,
             val markAsUnreadFeatureFlagEnabled: Boolean,
-            val eventCacheFeatureFlagEnabled: Boolean,
             val hasNewContent: Boolean,
         ) : ContextMenu
     }
@@ -42,11 +37,7 @@ data class MatrixUser(
     val avatarUrl: String? = null,
 )
 
-enum class SecurityBannerState {
-    None,
-    SetUpRecovery,
-    RecoveryKeyConfirmation,
-}
+
 
 fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
     id = userId.full,
@@ -56,16 +47,13 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
 )
 
 fun MatrixUser.getBestName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.full
 }
 @Immutable
 sealed interface RoomListContentState {
     data class Skeleton(val count: Int) : RoomListContentState
-    data class Empty(
-        val securityBannerState: SecurityBannerState,
-    ) : RoomListContentState
+    data object Empty : RoomListContentState
     data class Rooms(
-        val securityBannerState: SecurityBannerState,
         val summaries: List<RoomListRoomSummary>,
     ) : RoomListContentState
 }

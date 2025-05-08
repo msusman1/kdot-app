@@ -1,6 +1,5 @@
 package io.kdot.app.ui.roomlist
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.kdot.app.designsystem.common.avatarSize
@@ -9,7 +8,7 @@ import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
 import io.kdot.app.domain.AvatarData
 import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.matrix.MatrixClientProvider
-import io.kdot.app.ui.roomlist.filter.RoomFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +33,7 @@ import net.folivo.trixnity.utils.toByteArray
 class RoomListViewModel(
     private val clientProvider: MatrixClientProvider
 ) : ViewModel() {
-    val roomFilterStateHolder = RoomFilterStateHolder()
+    val roomListFilterStateHolder = RoomListFilterStateHolder()
     val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()

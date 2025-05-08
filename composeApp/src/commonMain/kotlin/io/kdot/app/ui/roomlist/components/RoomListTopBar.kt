@@ -46,7 +46,7 @@ import io.kdot.app.designsystem.text.roundToPx
 import io.kdot.app.designsystem.text.toSp
 import io.kdot.app.domain.AvatarData
 import io.kdot.app.ui.roomlist.MatrixUser
-import io.kdot.app.ui.roomlist.filter.RoomFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
 import io.kdot.app.ui.roomlist.filter.RoomListFiltersView
 import io.kdot.app.ui.roomlist.getAvatarData
 import io.kdot.app.ui.theme.appTypography
@@ -62,7 +62,7 @@ fun RoomListTopBar(
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     displayFilters: Boolean,
-    roomFilterStateHolder: RoomFilterStateHolder,
+    roomListFilterStateHolder: RoomListFilterStateHolder,
     modifier: Modifier = Modifier,
 ) {
     DefaultRoomListTopBar(
@@ -73,7 +73,7 @@ fun RoomListTopBar(
         scrollBehavior = scrollBehavior,
 
         displayFilters = displayFilters,
-        roomFilterStateHolder = roomFilterStateHolder,
+        roomListFilterStateHolder = roomListFilterStateHolder,
         modifier = modifier,
     )
 }
@@ -87,7 +87,7 @@ private fun DefaultRoomListTopBar(
     onOpenSettings: () -> Unit,
     onSearchClick: () -> Unit,
     displayFilters: Boolean,
-    roomFilterStateHolder: RoomFilterStateHolder,
+    roomListFilterStateHolder: RoomListFilterStateHolder,
     modifier: Modifier = Modifier,
 ) {
     // We need this to manually clip the top app bar in preview mode
@@ -160,7 +160,7 @@ private fun DefaultRoomListTopBar(
                 )
                 if (displayFilters) {
                     RoomListFiltersView(
-                        roomFilterStateHolder = roomFilterStateHolder,
+                        roomListFilterStateHolder = roomListFilterStateHolder,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                 }

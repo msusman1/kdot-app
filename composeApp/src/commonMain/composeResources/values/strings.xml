@@ -57,5 +57,17 @@
     <string name="action_leave">Leave</string>
     <string name="screen_roomlist_main_space_title">Chats</string>
     <string name="screen_roomlist_a11y_create_message">Create a new conversation or room</string>
+    <string name="screen_roomlist_room_directory_button_title">Browse all rooms</string>
+    <string name="screen_roomlist_filter_unreads_empty_state_title">Congrats! You don’t have any unread messages!</string>
+    <string name="screen_roomlist_filter_mixed_empty_state_subtitle">You can deselect filters in order to see your other chats</string>
+    <string name="screen_roomlist_filter_people_empty_state_title">You don’t have any DMs yet</string>
+    <string name="screen_roomlist_filter_rooms_empty_state_title">You’re not in any room yet</string>
+    <string name="screen_roomlist_filter_favourites_empty_state_title">You don’t have favourite chats yet</string>
+    <string name="screen_roomlist_filter_favourites_empty_state_subtitle">You can add a chat to your favourites in the chat settings. </string>
+    <string name="screen_roomlist_filter_invites_empty_state_title">You don\'t have any pending invites.</string>
+    <string name="screen_roomlist_filter_mixed_empty_state_title">You don’t have chats for this selection</string>
+    <string name="screen_roomlist_empty_title">No chats yet.</string>
+    <string name="screen_roomlist_empty_message">Get started by messaging someone.</string>
+    <string name="action_start_chat">Start chat</string>
 
 </resources>

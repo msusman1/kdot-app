@@ -44,9 +44,7 @@ fun MainNavGraph() {
                 navController.navigate("room/$roomId")
             }, onSettingsClick = {
                 navController.navigate("settings")
-            }, onSetUpRecoveryClick = {
-                navController.navigate("recovery/setup")
-            }, onConfirmRecoveryKeyClick = {}, onCreateRoomClick = {
+            }, onCreateRoomClick = {
                 navController.navigate("room/create")
             }, onRoomSettingsClick = { roomId ->
                 navController.navigate("room/$roomId/settings")

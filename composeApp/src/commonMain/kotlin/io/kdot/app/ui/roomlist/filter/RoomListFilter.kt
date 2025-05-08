@@ -1,13 +1,13 @@
 package io.kdot.app.ui.roomlist.filter
 
-enum class RoomFilter(val readable: String) {
+enum class RoomListFilter(val readable: String) {
     Unread("Unread"),
     People("People"),
     Rooms("Rooms"),
     Favourites("Favourites"),
     Invites("Invites");
 
-    val incompatibleFilters: Set<RoomFilter>
+    val incompatibleFilters: Set<RoomListFilter>
         get() = when (this) {
             Rooms -> setOf(People, Invites)
             People -> setOf(Rooms, Invites)

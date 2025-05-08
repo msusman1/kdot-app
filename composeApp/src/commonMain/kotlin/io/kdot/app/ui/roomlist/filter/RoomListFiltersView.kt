@@ -32,10 +32,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun RoomListFiltersView(
-    roomFilterStateHolder: RoomFilterStateHolder,
+    roomListFilterStateHolder: RoomListFilterStateHolder,
     modifier: Modifier = Modifier
 ) {
-    val roomFilterState by roomFilterStateHolder.filterSelectionStates.collectAsStateWithLifecycle()
+    val roomFilterState by roomListFilterStateHolder.filterSelectionStates.collectAsStateWithLifecycle()
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         modifier = modifier.fillMaxWidth(),
@@ -48,19 +48,19 @@ fun RoomListFiltersView(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .testTag("clear_filter"),
-                    onClick = roomFilterStateHolder::clear
+                    onClick = roomListFilterStateHolder::clear
                 )
             }
         }
         roomFilterState.forEach {
 
-            item(it.roomFilter) {
+            item(it.roomListFilter) {
                 RoomListFilterView(
                     modifier = Modifier
                         .animateItem(),
-                    roomListFilter = it.roomFilter,
+                    roomListFilter = it.roomListFilter,
                     selected = it.isSelected,
-                    onClick = roomFilterStateHolder::toggle
+                    onClick = roomListFilterStateHolder::toggle
                 )
             }
         }
@@ -90,9 +90,9 @@ private fun RoomListClearFiltersButton(
 
 @Composable
 private fun RoomListFilterView(
-    roomListFilter: RoomFilter,
+    roomListFilter: RoomListFilter,
     selected: Boolean,
-    onClick: (RoomFilter) -> Unit,
+    onClick: (RoomListFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val background = animateColorAsState(

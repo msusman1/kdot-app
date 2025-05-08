@@ -1,56 +1,61 @@
 package io.kdot.app.ui.roomlist.filter
 
+import androidx.compose.material.icons.Icons
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 
-class RoomFilterStateHolder {
-    private val selectedFilters = LinkedHashSet<RoomFilter>()
+class RoomListFilterStateHolder {
+    private val _selectedFilters = LinkedHashSet<RoomListFilter>()
     private val _filterSelectionStates = MutableStateFlow(buildFilters())
     val filterSelectionStates: StateFlow<Set<FilterSelectionState>> =
         _filterSelectionStates.asStateFlow()
 
-    private fun select(roomFilter: RoomFilter) {
-        selectedFilters.add(roomFilter)
+    val hasAnyFilterSelected = _selectedFilters.isNotEmpty()
+
+    val  selectedFilter:List<RoomListFilter> get() = _selectedFilters.toList()
+
+    private fun select(roomListFilter: RoomListFilter) {
+        _selectedFilters.add(roomListFilter)
         _filterSelectionStates.value = buildFilters()
     }
 
-    private fun deselect(roomFilter: RoomFilter) {
-        selectedFilters.remove(roomFilter)
+    private fun deselect(roomListFilter: RoomListFilter) {
+        _selectedFilters.remove(roomListFilter)
         _filterSelectionStates.value = buildFilters()
     }
 
-    private fun isSelected(roomFilter: RoomFilter): Boolean {
-        return selectedFilters.contains(roomFilter)
+    private fun isSelected(roomListFilter: RoomListFilter): Boolean {
+        return _selectedFilters.contains(roomListFilter)
     }
 
-    fun toggle(roomFilter: RoomFilter) {
-        if (isSelected(roomFilter)) {
-            deselect(roomFilter)
+    fun toggle(roomListFilter: RoomListFilter) {
+        if (isSelected(roomListFilter)) {
+            deselect(roomListFilter)
         } else {
-            select(roomFilter)
+            select(roomListFilter)
         }
     }
 
     fun clear() {
-        selectedFilters.clear()
+        _selectedFilters.clear()
         _filterSelectionStates.value = buildFilters()
     }
 
     private fun buildFilters(): Set<FilterSelectionState> {
-        val selectedFilterStates = selectedFilters.map {
+        val selectedFilterStates = _selectedFilters.map {
             FilterSelectionState(
-                roomFilter = it,
+                roomListFilter = it,
                 isSelected = true
             )
         }
-        val unselectedFilters = RoomFilter.entries - selectedFilters - selectedFilters
+        val unselectedFilters = RoomListFilter.entries - _selectedFilters - _selectedFilters
             .flatMap { it.incompatibleFilters }
             .toSet()
         val unselectedFilterStates = unselectedFilters.map {
             FilterSelectionState(
-                roomFilter = it,
+                roomListFilter = it,
                 isSelected = false
             )
         }
