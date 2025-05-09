@@ -155,7 +155,7 @@ private fun RoomListScaffold(
         content = { padding ->
             RoomListContentView(
                 contentState = state.contentState,
-                filtersState = state.filtersState,
+                filtersStateHolder = roomListFilterStateHolder,
                 eventSink = state.eventSink,
                 onRoomClick = ::onRoomClick,
                 onCreateRoomClick = onCreateRoomClick,

@@ -1,6 +1,5 @@
 package io.kdot.app.ui.roomlist.filter
 
-import androidx.compose.material.icons.Icons
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

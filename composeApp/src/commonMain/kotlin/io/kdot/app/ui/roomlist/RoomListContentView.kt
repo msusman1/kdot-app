@@ -45,7 +45,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RoomListContentView(
     contentState: RoomListContentState,
-    filtersState: RoomListFilterStateHolder,
+    filtersStateHolder: RoomListFilterStateHolder,
     eventSink: (RoomListEvents) -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
@@ -68,7 +68,7 @@ fun RoomListContentView(
             is RoomListContentState.Rooms -> {
                 RoomsView(
                     state = contentState,
-                    filtersState = filtersState,
+                    filtersStateHolder = filtersStateHolder,
                     eventSink = eventSink,
                     onRoomClick = onRoomClick,
                 )
@@ -116,14 +116,14 @@ private fun EmptyView(
 @Composable
 private fun RoomsView(
     state: RoomListContentState.Rooms,
-    filtersState: RoomListFilterStateHolder,
+    filtersStateHolder: RoomListFilterStateHolder,
     eventSink: (RoomListEvents) -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
+    if (state.summaries.isEmpty() && filtersStateHolder.hasAnyFilterSelected) {
         EmptyViewForFilterStates(
-            selectedFilters = filtersState.selectedFilter,
+            selectedFilters = filtersStateHolder.selectedFilter,
             modifier = modifier.fillMaxSize()
         )
     } else {
