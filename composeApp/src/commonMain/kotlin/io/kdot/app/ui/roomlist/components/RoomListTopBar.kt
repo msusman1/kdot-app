@@ -46,7 +46,8 @@ import io.kdot.app.designsystem.text.roundToPx
 import io.kdot.app.designsystem.text.toSp
 import io.kdot.app.domain.AvatarData
 import io.kdot.app.ui.roomlist.MatrixUser
-import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomListFilterEvents
+import io.kdot.app.ui.roomlist.filter.RoomListFilterState
 import io.kdot.app.ui.roomlist.filter.RoomListFiltersView
 import io.kdot.app.ui.roomlist.getAvatarData
 import io.kdot.app.ui.theme.appTypography
@@ -62,32 +63,8 @@ fun RoomListTopBar(
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     displayFilters: Boolean,
-    roomListFilterStateHolder: RoomListFilterStateHolder,
-    modifier: Modifier = Modifier,
-) {
-    DefaultRoomListTopBar(
-        matrixUser = matrixUser,
-        showAvatarIndicator = showAvatarIndicator,
-        onOpenSettings = onOpenSettings,
-        onSearchClick = onToggleSearch,
-        scrollBehavior = scrollBehavior,
-
-        displayFilters = displayFilters,
-        roomListFilterStateHolder = roomListFilterStateHolder,
-        modifier = modifier,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DefaultRoomListTopBar(
-    matrixUser: MatrixUser,
-    showAvatarIndicator: Boolean,
-    scrollBehavior: TopAppBarScrollBehavior,
-    onOpenSettings: () -> Unit,
-    onSearchClick: () -> Unit,
-    displayFilters: Boolean,
-    roomListFilterStateHolder: RoomListFilterStateHolder,
+    roomListFilterState: RoomListFilterState,
+    eventSinkRoomListFilter: (RoomListFilterEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // We need this to manually clip the top app bar in preview mode
@@ -146,7 +123,7 @@ private fun DefaultRoomListTopBar(
                     },
                     actions = {
                         IconButton(
-                            onClick = onSearchClick,
+                            onClick = onToggleSearch,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Search,
@@ -160,7 +137,8 @@ private fun DefaultRoomListTopBar(
                 )
                 if (displayFilters) {
                     RoomListFiltersView(
-                        roomListFilterStateHolder = roomListFilterStateHolder,
+                        roomListFilterState = roomListFilterState,
+                        eventSink = eventSinkRoomListFilter,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                 }

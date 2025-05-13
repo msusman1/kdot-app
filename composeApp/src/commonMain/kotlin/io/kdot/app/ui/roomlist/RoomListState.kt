@@ -2,8 +2,12 @@ package io.kdot.app.ui.roomlist
 
 import androidx.compose.runtime.Immutable
 import io.kdot.app.designsystem.components.avatar.AvatarSize
+import io.kdot.app.designsystem.utils.snackbar.SnackbarMessage
 import io.kdot.app.domain.AvatarData
 import io.kdot.app.domain.RoomListRoomSummary
+import io.kdot.app.features.leaveroom.LeaveRoomState
+import io.kdot.app.ui.roomlist.filter.RoomListFilterState
+import io.kdot.app.ui.roomlist.search.RoomListSearchState
 import net.folivo.trixnity.core.model.RoomId
 import net.folivo.trixnity.core.model.UserId
 
@@ -13,8 +17,34 @@ data class RoomListState(
     val hasNetworkConnection: Boolean,
     val contextMenu: ContextMenu,
     val contentState: RoomListContentState,
-    val eventSink: (RoomListEvents) -> Unit,
-){
+    val leaveRoomState: LeaveRoomState,
+    val snackbarMessage: SnackbarMessage?,
+    val filterState: RoomListFilterState,
+    val searchState: RoomListSearchState,
+) {
+    companion object {
+        val Default = RoomListState(
+            matrixUser = MatrixUser(userId = UserId("")),
+            showAvatarIndicator = true,
+            hasNetworkConnection = true,
+            contextMenu = ContextMenu.Hidden,
+            contentState = RoomListContentState.Empty,
+            leaveRoomState = LeaveRoomState(
+                confirmation = LeaveRoomState.Confirmation.Hidden,
+                progress = LeaveRoomState.Progress.Hidden,
+                error = LeaveRoomState.Error.Hidden,
+            ),
+            snackbarMessage = null,
+            filterState = emptySet(),
+            searchState = RoomListSearchState(
+                isSearchActive = false,
+                query = "",
+                results = emptyList(),
+                isRoomDirectorySearchEnabled = false
+            )
+        )
+    }
+
     val displayFilters = contentState is RoomListContentState.Rooms
 
 
@@ -38,7 +68,6 @@ data class MatrixUser(
 )
 
 
-
 fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
     id = userId.full,
     name = displayName,
@@ -49,6 +78,7 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
 fun MatrixUser.getBestName(): String {
     return displayName?.takeIf { it.isNotEmpty() } ?: userId.full
 }
+
 @Immutable
 sealed interface RoomListContentState {
     data class Skeleton(val count: Int) : RoomListContentState

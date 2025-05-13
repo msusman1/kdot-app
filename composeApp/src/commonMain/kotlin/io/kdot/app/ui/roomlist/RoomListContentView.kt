@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import io.kdot.app.designsystem.Resources
 import io.kdot.app.domain.RoomListRoomSummary
 import io.kdot.app.ui.roomlist.filter.RoomListFilter
-import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
+import io.kdot.app.ui.roomlist.filter.RoomListFilterState
 import io.kdot.app.ui.roomlist.filter.RoomListFiltersEmptyStateResources
 import io.kdot.app.ui.theme.appColors
 import io.kdot.app.ui.theme.appTypography
@@ -45,8 +45,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RoomListContentView(
     contentState: RoomListContentState,
-    filtersStateHolder: RoomListFilterStateHolder,
-    eventSink: (RoomListEvents) -> Unit,
+    filtersState: RoomListFilterState,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -68,8 +68,8 @@ fun RoomListContentView(
             is RoomListContentState.Rooms -> {
                 RoomsView(
                     state = contentState,
-                    filtersStateHolder = filtersStateHolder,
-                    eventSink = eventSink,
+                    filtersState = filtersState,
+                    eventSinkRoomList = eventSinkRoomList,
                     onRoomClick = onRoomClick,
                 )
             }
@@ -116,20 +116,20 @@ private fun EmptyView(
 @Composable
 private fun RoomsView(
     state: RoomListContentState.Rooms,
-    filtersStateHolder: RoomListFilterStateHolder,
-    eventSink: (RoomListEvents) -> Unit,
+    filtersState: RoomListFilterState,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.summaries.isEmpty() && filtersStateHolder.hasAnyFilterSelected) {
+    if (state.summaries.isEmpty() && filtersState.none { it.isSelected }) {
         EmptyViewForFilterStates(
-            selectedFilters = filtersStateHolder.selectedFilter,
+            selectedFilters = filtersState.filter { it.isSelected }.map { it.roomListFilter },
             modifier = modifier.fillMaxSize()
         )
     } else {
         RoomsViewList(
             state = state,
-            eventSink = eventSink,
+            eventSinkRoomList = eventSinkRoomList,
             onRoomClick = onRoomClick,
             modifier = modifier.fillMaxSize(),
         )
@@ -139,7 +139,7 @@ private fun RoomsView(
 @Composable
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -152,7 +152,7 @@ private fun RoomsViewList(
             firstItemIndex until firstItemIndex + size
         }
     }
-    val updatedEventSink by rememberUpdatedState(newValue = eventSink)
+    val updatedEventSink by rememberUpdatedState(newValue = eventSinkRoomList)
     LaunchedEffect(visibleRange) {
         updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
     }
@@ -173,7 +173,7 @@ private fun RoomsViewList(
             RoomSummaryRow(
                 room = room,
                 onClick = onRoomClick,
-                eventSink = eventSink,
+                eventSinkRoomList = eventSinkRoomList,
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()

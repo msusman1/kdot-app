@@ -7,9 +7,7 @@
 
 package io.kdot.app.designsystem.components.avatar
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -19,6 +17,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.kdot.app.domain.AvatarData
+import io.kdot.app.libraries.core.data.swap
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -33,21 +32,23 @@ fun CompositeAvatar(
     if (avatarData.url != null || heroes.isEmpty()) {
         Avatar(avatarData, modifier, contentDescription)
     } else {
-        val limitedHeroes = heroes.take(4)
+        val limitedHeroes: MutableList<AvatarData> = heroes.take(4).toMutableList()
         val numberOfHeroes = limitedHeroes.size
         if (numberOfHeroes == 4) {
             // Swap 2 and 3 so that the 4th hero is at the bottom right
-            Collections.swap(limitedHeroes, 2, 3)
+            limitedHeroes.swap(2, 3)
         }
         when (numberOfHeroes) {
             0 -> {
                 error("Unsupported number of heroes: 0")
             }
+
             1 -> {
                 Avatar(heroes[0], modifier, contentDescription)
             }
+
             else -> {
-                val angle = 2 * Math.PI / numberOfHeroes
+                val angle = 2 * PI / numberOfHeroes
                 val offsetRadius = when (numberOfHeroes) {
                     2 -> avatarData.size.dp.value / 4.2
                     3 -> avatarData.size.dp.value / 4.0
@@ -75,8 +76,10 @@ fun CompositeAvatar(
                     contentAlignment = Alignment.Center,
                 ) {
                     limitedHeroes.forEachIndexed { index, heroAvatar ->
-                        val xOffset = (offsetRadius * cos(angle * index.toDouble() + angleOffset)).dp
-                        val yOffset = (offsetRadius * sin(angle * index.toDouble() + angleOffset)).dp
+                        val xOffset =
+                            (offsetRadius * cos(angle * index.toDouble() + angleOffset)).dp
+                        val yOffset =
+                            (offsetRadius * sin(angle * index.toDouble() + angleOffset)).dp
                         Box(
                             modifier = Modifier
                                 .size(heroAvatarSize)
@@ -97,27 +100,3 @@ fun CompositeAvatar(
     }
 }
 
-@Preview(group = PreviewGroup.Avatars)
-@Composable
-internal fun CompositeAvatarPreview() = ElementThemedPreview {
-    val mainAvatar = anAvatarData(
-        id = "Zac",
-        name = "Zac",
-        size = AvatarSize.RoomListItem,
-    )
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        repeat(6) { nbOfHeroes ->
-            CompositeAvatar(
-                avatarData = mainAvatar,
-                heroes = List(nbOfHeroes) { aHeroAvatarData(it) }.toPersistentList(),
-            )
-        }
-    }
-}
-
-private fun aHeroAvatarData(i: Int) = anAvatarData(
-    id = ('A' + i).toString(),
-    name = ('A' + i).toString()
-)

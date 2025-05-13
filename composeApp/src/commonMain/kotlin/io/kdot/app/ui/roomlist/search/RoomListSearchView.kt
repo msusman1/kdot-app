@@ -58,7 +58,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun RoomListSearchView(
     state: RoomListSearchState,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSinkRoomListSearch: (RoomListSearchEvents) -> Unit,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     onRoomClick: (RoomId) -> Unit,
     onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -83,7 +84,8 @@ internal fun RoomListSearchView(
                 RoomListSearchContent(
                     state = state,
                     onRoomClick = onRoomClick,
-                    eventSink = eventSink,
+                    eventSinkRoomListSearch = eventSinkRoomListSearch,
+                    eventSinkRoomList = eventSinkRoomList,
                     onRoomDirectorySearchClick = onRoomDirectorySearchClick,
                 )
             }
@@ -95,14 +97,15 @@ internal fun RoomListSearchView(
 @Composable
 private fun RoomListSearchContent(
     state: RoomListSearchState,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSinkRoomListSearch: (RoomListSearchEvents) -> Unit,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     onRoomClick: (RoomId) -> Unit,
     onRoomDirectorySearchClick: () -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
     fun onBackButtonClick() {
-        state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
+        eventSinkRoomListSearch(RoomListSearchEvents.ToggleSearchVisibility)
     }
 
     fun onRoomClick(room: RoomListRoomSummary) {
@@ -129,7 +132,13 @@ private fun RoomListSearchContent(
                             .focusRequester(focusRequester),
                         value = filter,
                         singleLine = true,
-                        onValueChange = { state.eventSink(RoomListSearchEvents.QueryChanged(it)) },
+                        onValueChange = {
+                            eventSinkRoomListSearch(
+                                RoomListSearchEvents.QueryChanged(
+                                    it
+                                )
+                            )
+                        },
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -142,7 +151,7 @@ private fun RoomListSearchContent(
                         trailingIcon = {
                             if (filter.isNotEmpty()) {
                                 IconButton(onClick = {
-                                    state.eventSink(RoomListSearchEvents.ClearQuery)
+                                    eventSinkRoomListSearch(RoomListSearchEvents.ClearQuery)
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Close,
@@ -186,7 +195,7 @@ private fun RoomListSearchContent(
                     RoomSummaryRow(
                         room = room,
                         onClick = ::onRoomClick,
-                        eventSink = eventSink,
+                        eventSinkRoomList = eventSinkRoomList,
                     )
                 }
             }

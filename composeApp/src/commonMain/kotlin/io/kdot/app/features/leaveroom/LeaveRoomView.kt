@@ -8,8 +8,6 @@
 package io.kdot.app.features.leaveroom
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import io.kdot.app.designsystem.Resources
 import io.kdot.app.designsystem.components.dialogs.ConfirmationDialog
 import io.kdot.app.designsystem.components.dialogs.ErrorDialog
@@ -20,12 +18,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LeaveRoomView(
-    leaveRoomStateHolder: LeaveRoomStateHolder
+    leaveRoomState: LeaveRoomState,
+    eventSink: (LeaveRoomEvent) -> Unit,
 ) {
-    val leaveRoomState by leaveRoomStateHolder.leaveRoomStateFlow.collectAsState()
-    LeaveRoomConfirmationDialog(leaveRoomState, eventSink = leaveRoomStateHolder::handleEvent)
+    LeaveRoomConfirmationDialog(leaveRoomState, eventSink)
     LeaveRoomProgressDialog(leaveRoomState)
-    LeaveRoomErrorDialog(leaveRoomState, eventSink = leaveRoomStateHolder::handleEvent)
+    LeaveRoomErrorDialog(leaveRoomState, eventSink)
 }
 
 @Composable

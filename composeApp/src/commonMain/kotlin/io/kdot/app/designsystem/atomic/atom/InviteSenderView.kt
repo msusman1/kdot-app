@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.kdot.app.designsystem.common.Avatar
+import io.kdot.app.designsystem.components.avatar.Avatar
 import io.kdot.app.domain.InviteSender
 import io.kdot.app.ui.theme.appColors
 import io.kdot.app.ui.theme.appTypography
@@ -32,8 +32,7 @@ fun InviteSenderView(
     ) {
         Box(modifier = Modifier.padding(vertical = 2.dp)) {
             Avatar(
-                image = inviteSender.avatarData.avatar,
-                initials = inviteSender.avatarData.initials
+                avatarData = inviteSender.avatarData,
             )
         }
         Text(

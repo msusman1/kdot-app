@@ -61,7 +61,7 @@ internal val minHeight = 84.dp
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSinkRoomList: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -94,10 +94,10 @@ internal fun RoomSummaryRow(
                     Spacer(modifier = Modifier.height(12.dp))
                     InviteButtonsRow(
                         onAcceptClick = {
-                            eventSink(RoomListEvents.AcceptInvite(room))
+                            eventSinkRoomList(RoomListEvents.AcceptInvite(room))
                         },
                         onDeclineClick = {
-                            eventSink(RoomListEvents.DeclineInvite(room))
+                            eventSinkRoomList(RoomListEvents.DeclineInvite(room))
                         }
                     )
                 }
@@ -108,7 +108,7 @@ internal fun RoomSummaryRow(
                     room = room,
                     onClick = onClick,
                     onLongClick = {
-                        eventSink(RoomListEvents.ShowContextMenu(room))
+                        eventSinkRoomList(RoomListEvents.ShowContextMenu(room))
                     },
                 ) {
                     NameAndTimestampRow(

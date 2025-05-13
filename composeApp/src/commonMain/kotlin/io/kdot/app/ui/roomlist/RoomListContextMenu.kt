@@ -11,7 +11,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MarkAsUnread
 import androidx.compose.material.icons.filled.Markunread
@@ -63,11 +62,7 @@ fun RoomListContextMenu(
             },
             onFavoriteChange = { isFavorite ->
                 eventSink(RoomListEvents.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
-            },
-            onClearCacheRoomClick = {
-                eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.ClearCacheOfRoom(contextMenu.roomId))
-            },
+            }
         )
     }
 }
@@ -80,7 +75,6 @@ private fun RoomListModalBottomSheetContent(
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
     onRoomMarkReadClick: () -> Unit,
     onRoomMarkUnreadClick: () -> Unit,
-    onClearCacheRoomClick: () -> Unit,
 ) {
 
     Column(

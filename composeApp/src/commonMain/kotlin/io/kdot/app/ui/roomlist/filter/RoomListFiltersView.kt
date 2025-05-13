@@ -21,21 +21,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
 fun RoomListFiltersView(
-    roomListFilterStateHolder: RoomListFilterStateHolder,
+    roomListFilterState: RoomListFilterState,
+    eventSink: (RoomListFilterEvents) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val roomFilterState by roomListFilterStateHolder.filterSelectionStates.collectAsStateWithLifecycle()
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         modifier = modifier.fillMaxWidth(),
@@ -43,16 +41,16 @@ fun RoomListFiltersView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         item("clear_filters") {
-            if (roomFilterState.any { it.isSelected }) {
+            if (roomListFilterState.any { it.isSelected }) {
                 RoomListClearFiltersButton(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .testTag("clear_filter"),
-                    onClick = roomListFilterStateHolder::clear
+                    onClick = { eventSink(RoomListFilterEvents.Clear) }
                 )
             }
         }
-        roomFilterState.forEach {
+        roomListFilterState.forEach {
 
             item(it.roomListFilter) {
                 RoomListFilterView(
@@ -60,7 +58,7 @@ fun RoomListFiltersView(
                         .animateItem(),
                     roomListFilter = it.roomListFilter,
                     selected = it.isSelected,
-                    onClick = roomListFilterStateHolder::toggle
+                    onClick = { eventSink(RoomListFilterEvents.Toggle(it)) }
                 )
             }
         }

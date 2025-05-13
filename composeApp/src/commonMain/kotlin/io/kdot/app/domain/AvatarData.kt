@@ -16,13 +16,13 @@ data class AvatarData(
         (name?.takeIf { it.isNotBlank() } ?: id.takeIf { !it.startsWith("!") } ?: "#")
             .let { dn ->
                 var startIndex = 0
-                val initial = dn[startIndex]
+                val initial = dn.getOrNull(startIndex)?:'U'
 
                 if (initial in listOf('@', '#', '+') && dn.length > 1) {
                     startIndex++
                 }
 
-                var next = dn[startIndex]
+                var next = dn.getOrNull(startIndex)?:'c'
 
                 // LEFT-TO-RIGHT MARK
                 if (dn.length >= 2 && 0x200e == next.code) {

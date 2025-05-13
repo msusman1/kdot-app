@@ -12,8 +12,6 @@ import net.folivo.trixnity.core.model.RoomId
 
 sealed interface RoomListEvents {
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
-    data object DismissRequestVerificationPrompt : RoomListEvents
-    data object DismissBanner : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
     data class AcceptInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data class DeclineInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
@@ -25,5 +23,4 @@ sealed interface RoomListEvents {
     data class MarkAsRead(val roomId: RoomId) : ContextMenuEvents
     data class MarkAsUnread(val roomId: RoomId) : ContextMenuEvents
     data class SetRoomIsFavorite(val roomId: RoomId, val isFavorite: Boolean) : ContextMenuEvents
-    data class ClearCacheOfRoom(val roomId: RoomId) : ContextMenuEvents
 }

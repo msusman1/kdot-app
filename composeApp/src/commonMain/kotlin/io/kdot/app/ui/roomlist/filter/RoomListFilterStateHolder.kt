@@ -4,32 +4,40 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+typealias RoomListFilterState = Set<FilterSelectionState>
 
 class RoomListFilterStateHolder {
     private val _selectedFilters = LinkedHashSet<RoomListFilter>()
-    private val _filterSelectionStates = MutableStateFlow(buildFilters())
-    val filterSelectionStates: StateFlow<Set<FilterSelectionState>> =
-        _filterSelectionStates.asStateFlow()
+    private val _filterSelectionState = MutableStateFlow(buildFilters())
+    val filterSelectionState: StateFlow<RoomListFilterState> =
+        _filterSelectionState.asStateFlow()
 
     val hasAnyFilterSelected = _selectedFilters.isNotEmpty()
 
-    val  selectedFilter:List<RoomListFilter> get() = _selectedFilters.toList()
+    val selectedFilter: List<RoomListFilter> get() = _selectedFilters.toList()
 
     private fun select(roomListFilter: RoomListFilter) {
         _selectedFilters.add(roomListFilter)
-        _filterSelectionStates.value = buildFilters()
+        _filterSelectionState.value = buildFilters()
     }
 
     private fun deselect(roomListFilter: RoomListFilter) {
         _selectedFilters.remove(roomListFilter)
-        _filterSelectionStates.value = buildFilters()
+        _filterSelectionState.value = buildFilters()
     }
 
     private fun isSelected(roomListFilter: RoomListFilter): Boolean {
         return _selectedFilters.contains(roomListFilter)
     }
 
-    fun toggle(roomListFilter: RoomListFilter) {
+    fun handleEvent(roomListFilterEvents: RoomListFilterEvents) {
+        when (roomListFilterEvents) {
+            is RoomListFilterEvents.Toggle -> toggle(roomListFilterEvents.roomListFilter)
+            is RoomListFilterEvents.Clear -> clear()
+        }
+    }
+
+    private fun toggle(roomListFilter: RoomListFilter) {
         if (isSelected(roomListFilter)) {
             deselect(roomListFilter)
         } else {
@@ -37,9 +45,9 @@ class RoomListFilterStateHolder {
         }
     }
 
-    fun clear() {
+    private fun clear() {
         _selectedFilters.clear()
-        _filterSelectionStates.value = buildFilters()
+        _filterSelectionState.value = buildFilters()
     }
 
     private fun buildFilters(): Set<FilterSelectionState> {
