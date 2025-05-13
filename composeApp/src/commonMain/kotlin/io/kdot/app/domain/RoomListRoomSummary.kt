@@ -9,6 +9,8 @@ package io.kdot.app.domain
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
+import io.kdot.app.designsystem.components.avatar.AvatarSize
+import net.folivo.trixnity.client.store.Room
 import net.folivo.trixnity.core.model.Mention
 import net.folivo.trixnity.core.model.RoomId
 
@@ -41,4 +43,32 @@ data class RoomListRoomSummary(
             numberOfUnreadNotifications > 0 ||
             isMarkedUnread ||
             displayType == RoomSummaryDisplayType.INVITE
+}
+
+fun createRoomSummary(room: Room): RoomListRoomSummary {
+    return RoomListRoomSummary(
+        id = room.roomId.full,
+        displayType = RoomSummaryDisplayType.ROOM,
+        roomId = room.roomId,
+        name = room.name?.explicitName,
+        canonicalAlias = null,
+        numberOfUnreadMessages = room.unreadMessageCount,
+        numberOfUnreadMentions = 0,
+        numberOfUnreadNotifications = 0,
+        isMarkedUnread = room.markedUnread,
+        timestamp = room.lastRelevantEventTimestamp?.toString(),
+        lastMessage = null,
+        avatarData = AvatarData(
+            id = room.roomId.full,
+            url = room.avatarUrl,
+            name = room.name?.explicitName ?: "",
+            size = AvatarSize.RoomListItem
+        ),
+        hasRoomCall = false,
+        isDirect = room.isDirect,
+        isDm = room.isDirect,
+        isFavorite = false,
+        inviteSender = null,
+        heroes = emptyList()
+    )
 }

@@ -15,6 +15,14 @@ data class LeaveRoomState(
     val progress: Progress,
     val error: Error,
 ) {
+
+    companion object {
+        val Default = LeaveRoomState(
+            confirmation = Confirmation.Hidden,
+            progress = Progress.Hidden,
+            error = Error.Hidden,
+        )
+    }
     sealed interface Confirmation {
         data object Hidden : Confirmation
         data class Dm(val roomId: RoomId) : Confirmation
