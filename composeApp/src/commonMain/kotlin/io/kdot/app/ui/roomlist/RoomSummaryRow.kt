@@ -51,7 +51,7 @@ import io.kdot.app.domain.RoomListRoomSummary
 import io.kdot.app.ui.theme.appColors
 import io.kdot.app.ui.theme.appTypography
 import io.kdot.app.ui.theme.unreadIndicator
-import net.folivo.trixnity.core.model.Mention
+import net.folivo.trixnity.core.model.RoomAliasId
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -135,7 +135,7 @@ internal fun RoomSummaryRow(
                     )
                     if (room.canonicalAlias != null) {
                         Text(
-                            text = room.canonicalAlias.label.orEmpty(),
+                            text = room.canonicalAlias.full,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.appTypography.fontBodyMdRegular,
@@ -156,7 +156,6 @@ internal fun RoomSummaryRow(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun RoomSummaryScaffoldRow(
     room: RoomListRoomSummary,
@@ -230,13 +229,13 @@ private fun NameAndTimestampRow(
 private fun InviteSubtitle(
     isDm: Boolean,
     inviteSender: InviteSender?,
-    canonicalAlias: Mention.RoomAlias?,
+    canonicalAlias: RoomAliasId?,
     modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDm) {
         inviteSender?.userId?.domain
     } else {
-        canonicalAlias?.label
+        canonicalAlias?.full
     }
     if (subtitle != null) {
         Text(

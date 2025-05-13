@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.kdot.app.designsystem.components.avatar.AvatarSize
 import net.folivo.trixnity.client.store.Room
-import net.folivo.trixnity.core.model.Mention
+import net.folivo.trixnity.core.model.RoomAliasId
 import net.folivo.trixnity.core.model.RoomId
 
 @Immutable
@@ -20,7 +20,7 @@ data class RoomListRoomSummary(
     val displayType: RoomSummaryDisplayType,
     val roomId: RoomId,
     val name: String?,
-    val canonicalAlias: Mention.RoomAlias?,
+    val canonicalAlias: RoomAliasId?,
     val numberOfUnreadMessages: Long,
     val numberOfUnreadMentions: Long,
     val numberOfUnreadNotifications: Long,

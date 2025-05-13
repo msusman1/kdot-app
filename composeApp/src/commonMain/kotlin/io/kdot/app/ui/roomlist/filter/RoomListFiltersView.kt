@@ -73,7 +73,7 @@ private fun RoomListClearFiltersButton(
     Box(
         modifier = modifier
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.primary).padding(4.dp)
             .clickable(onClick = onClick)
     ) {
         Icon(

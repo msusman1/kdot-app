@@ -7,12 +7,14 @@
 
 package io.kdot.app.domain
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import io.kdot.app.designsystem.Resources
+import io.kdot.app.ui.theme.appColors
 import net.folivo.trixnity.core.model.UserId
 import org.jetbrains.compose.resources.stringResource
 
@@ -25,29 +27,25 @@ data class InviteSender(
 ) {
     @Composable
     fun annotatedString(): AnnotatedString {
-        return stringResource(
+        val text = stringResource(
             Resources.String.screen_invites_invited_you,
             displayName,
             userId.full
-        ).let { text ->
-            val senderNameStart = stringResource(
-                Resources.String.screen_invites_invited_you,
-                displayName,
-                userId.full
-            ).indexOf("%1\$s")
-            AnnotatedString(
-                text = text,
-                spanStyles = listOf(
-                    AnnotatedString.Range(
-                        SpanStyle(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        start = senderNameStart,
-                        end = senderNameStart + displayName.length
-                    )
+        )
+        val start = text.indexOf(displayName)
+        return AnnotatedString(
+            text = text,
+            spanStyles = listOf(
+                AnnotatedString.Range(
+                    SpanStyle(
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.appColors.textPrimary
+                    ),
+                    start = start,
+                    end = start + displayName.length
                 )
             )
-        }
+        )
     }
 }
 

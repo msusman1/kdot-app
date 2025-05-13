@@ -40,17 +40,13 @@ fun MainNavGraph() {
             })
         }
         composable<Rooms> {
-            RoomListScreen(onRoomClick = { roomId ->
-                navController.navigate("room/$roomId")
-            }, onSettingsClick = {
-                navController.navigate("settings")
-            }, onCreateRoomClick = {
-                navController.navigate("room/create")
-            }, onRoomSettingsClick = { roomId ->
-                navController.navigate("room/$roomId/settings")
-            }, onRoomDirectorySearchClick = {
-                navController.navigate("room/directory/search")
-            })
+            RoomListScreen(
+                onRoomClick = {},
+                onSettingsClick = {},
+                onCreateRoomClick = {},
+                onRoomSettingsClick = { roomId -> },
+                onRoomDirectorySearchClick = {}
+            )
         }
     }
 

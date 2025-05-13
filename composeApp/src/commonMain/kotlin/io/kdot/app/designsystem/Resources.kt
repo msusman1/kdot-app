@@ -66,6 +66,7 @@ import kdotapp.composeapp.generated.resources.ic_compound_compose
 import kdotapp.composeapp.generated.resources.screen_roomlist_empty_title
 import kdotapp.composeapp.generated.resources.screen_roomlist_empty_message
 import kdotapp.composeapp.generated.resources.action_start_chat
+import kdotapp.composeapp.generated.resources.common_verification_complete
 
 object Resources {
     object Icon {
@@ -147,6 +148,7 @@ object Resources {
         val screen_roomlist_empty_title = Res.string.screen_roomlist_empty_title
         val screen_roomlist_empty_message = Res.string.screen_roomlist_empty_message
         val action_start_chat = Res.string.action_start_chat
+        val common_verification_complete = Res.string.common_verification_complete
 
     }
 

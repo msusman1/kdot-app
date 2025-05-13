@@ -68,7 +68,7 @@ fun RoomListContextMenu(
 }
 
 @Composable
-private fun RoomListModalBottomSheetContent(
+fun RoomListModalBottomSheetContent(
     contextMenu: RoomListState.ContextMenu.Shown,
     onRoomSettingsClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,

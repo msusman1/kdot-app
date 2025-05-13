@@ -236,7 +236,7 @@ private fun ButtonInternal(
 
             leadingIcon != null -> {
                 Icon(
-                    painter = painterResource(Res.drawable.app_logo),
+                    painter = painterResource(leadingIcon),
                     contentDescription = null,
                     tint = LocalContentColor.current,
                     modifier = Modifier.size(20.dp),

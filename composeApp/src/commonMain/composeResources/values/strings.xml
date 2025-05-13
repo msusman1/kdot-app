@@ -69,5 +69,7 @@
     <string name="screen_roomlist_empty_title">No chats yet.</string>
     <string name="screen_roomlist_empty_message">Get started by messaging someone.</string>
     <string name="action_start_chat">Start chat</string>
+    <string name="common_verification_complete">Verification complete</string>
+
 
 </resources>

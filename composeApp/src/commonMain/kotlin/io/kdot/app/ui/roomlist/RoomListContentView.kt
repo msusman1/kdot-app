@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.kdot.app.designsystem.Resources
+import io.kdot.app.designsystem.theme.Button
 import io.kdot.app.domain.RoomListRoomSummary
 import io.kdot.app.ui.roomlist.filter.RoomListFilter
 import io.kdot.app.ui.roomlist.filter.RoomListFilterState
@@ -101,7 +102,7 @@ private fun EmptyView(
             title = Resources.String.screen_roomlist_empty_title,
             subtitle = Resources.String.screen_roomlist_empty_message,
             action = {
-                io.kdot.app.designsystem.theme.Button(
+                Button(
                     text = stringResource(Resources.String.action_start_chat),
                     leadingIcon = Resources.Icon.ic_compound_compose,
                     onClick = onCreateRoomClick,
@@ -123,7 +124,8 @@ private fun RoomsView(
 ) {
     if (state.summaries.isEmpty() && filtersState.none { it.isSelected }) {
         EmptyViewForFilterStates(
-            selectedFilters = filtersState.filter { it.isSelected }.map { it.roomListFilter },
+            selectedFilters = filtersState.filter { it.isSelected }
+                .map { it.roomListFilter },
             modifier = modifier.fillMaxSize()
         )
     } else {
@@ -157,8 +159,7 @@ private fun RoomsViewList(
         updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
     }
     LazyColumn(
-        state = lazyListState,
-        modifier = modifier,
+        state = lazyListState, modifier = modifier,
         // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
