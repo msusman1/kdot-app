@@ -9,10 +9,11 @@ actual fun platformCreateMediaStoreModule(): Module = module {
     single<CreateMediaStore> {
         val path = get<RootPath>()
         CreateMediaStore {
-            FileSystem.SYSTEM.createDirectories(path.path)
+            platformFileSystem.createDirectories(path.path)
             OkioMediaStore(path.resolveMedia())
         }
     }
 }
 
 
+actual val platformFileSystem: FileSystem = FileSystem.SYSTEM

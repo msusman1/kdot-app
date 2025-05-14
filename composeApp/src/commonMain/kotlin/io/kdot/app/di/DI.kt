@@ -1,5 +1,7 @@
 package io.kdot.app.di
 
+import io.kdot.app.libraries.matrixui.media.ImageLoaderFactory
+import io.kdot.app.libraries.matrixui.media.ImageLoaderFactoryImpl
 import io.kdot.app.matrix.MatrixClientFactory
 import io.kdot.app.matrix.MatrixClientFactoryImpl
 import io.kdot.app.matrix.MatrixClientProvider
@@ -23,6 +25,7 @@ val appModules = module {
     viewModelOf(::RoomListViewModel)
     viewModelOf(::OnboardingViewModel)
     single<MatrixClientFactory> { MatrixClientFactoryImpl(get(), get()) }
+    single<ImageLoaderFactory> { ImageLoaderFactoryImpl() }
     singleOf(::MatrixClientProvider)
 }
 

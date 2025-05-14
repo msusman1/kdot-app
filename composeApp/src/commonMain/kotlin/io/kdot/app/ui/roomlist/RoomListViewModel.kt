@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
-import net.folivo.trixnity.core.model.UserId
 
 
 class RoomListViewModel(
@@ -45,7 +44,7 @@ class RoomListViewModel(
         val displayName = clientProvider.getClient().displayName
         return combine(avatarUrl, displayName) { aUrl, name ->
             MatrixUser(
-                userId = UserId(name ?: "msusman"),
+                userId = clientProvider.getClient().userId,
                 displayName = name,
                 avatarUrl = aUrl
             )
@@ -119,13 +118,4 @@ class RoomListViewModel(
 }
 
 
-/*
 
-private val userAvatar: Flow<ByteArray?> =
-    clientProvider.getClient().avatarUrl.map { avatarUrlOrNull ->
-        avatarUrlOrNull?.let { avatarUrl ->
-            clientProvider.getClient().media.getThumbnail(
-                uri = avatarUrl, height = avatarSize().toLong(), width = avatarSize().toLong()
-            ).fold(onSuccess = { it.toByteArray() }, onFailure = { null })
-        }
-    }*/

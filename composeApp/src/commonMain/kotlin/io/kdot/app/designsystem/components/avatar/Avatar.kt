@@ -8,15 +8,14 @@
 package io.kdot.app.designsystem.components.avatar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,12 +23,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import io.github.aakira.napier.Napier
 import io.kdot.app.designsystem.colors.AvatarColorsProvider
 import io.kdot.app.designsystem.text.toSp
 import io.kdot.app.domain.AvatarData
@@ -69,6 +69,7 @@ private fun ImageAvatar(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
+
     if (LocalInspectionMode.current) {
         // For compose previews, use debugPlaceholderAvatar()
         // instead of falling back to initials avatar on load failure
@@ -85,17 +86,19 @@ private fun ImageAvatar(
             contentScale = ContentScale.Crop,
             modifier = modifier
         ) {
-            when (val state = painter.state.value) {
+            val painterState by painter.state.collectAsStateWithLifecycle()
+            when (val state = painterState) {
                 is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
                 is AsyncImagePainter.State.Error -> {
                     SideEffect {
-//                        Timber.e(state.result.throwable, "Error loading avatar $state\n${state.result}")
+                        Napier.d("AsyncImagePainter Throwable: ${state.result.throwable} userId:${avatarData.id}")
                     }
                     InitialsAvatar(
                         avatarData = avatarData,
                         forcedAvatarSize = forcedAvatarSize,
                     )
                 }
+
                 else -> InitialsAvatar(
                     avatarData = avatarData,
                     forcedAvatarSize = forcedAvatarSize,
@@ -124,7 +127,11 @@ private fun InitialsAvatar(
                 .clearAndSetSemantics {}
                 .align(Alignment.Center),
             text = avatarData.initial,
-            style = originalFont.copy(fontSize = fontSize, lineHeight = lineHeight, letterSpacing = 0.sp),
+            style = originalFont.copy(
+                fontSize = fontSize,
+                lineHeight = lineHeight,
+                letterSpacing = 0.sp
+            ),
             color = avatarColors.foreground,
         )
     }

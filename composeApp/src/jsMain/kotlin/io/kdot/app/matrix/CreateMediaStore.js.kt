@@ -1,6 +1,8 @@
 package io.kdot.app.matrix
 
 import net.folivo.trixnity.client.media.opfs.OpfsMediaStore
+import okio.FileSystem
+import okio.NodeJsFileSystem
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import web.fs.FileSystemGetDirectoryOptions
@@ -20,3 +22,4 @@ actual fun platformCreateMediaStoreModule(): Module = module {
     }
 }
 
+actual val platformFileSystem: FileSystem = NodeJsFileSystem

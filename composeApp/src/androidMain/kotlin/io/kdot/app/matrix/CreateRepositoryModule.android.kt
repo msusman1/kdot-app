@@ -14,7 +14,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 actual fun platformCreateRepositoriesModule(): Module = module {
 
     single<CreateRepositoriesModule> {
-        val fileSystem = FileSystem.SYSTEM
+        val fileSystem: FileSystem = platformFileSystem
         val rootPath = get<RootPath>()
         val context = androidContext()
         object : CreateRepositoriesModule {

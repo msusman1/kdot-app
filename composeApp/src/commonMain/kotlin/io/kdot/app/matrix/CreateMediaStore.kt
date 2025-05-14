@@ -1,6 +1,7 @@
 package io.kdot.app.matrix
 
 import net.folivo.trixnity.client.media.MediaStore
+import okio.FileSystem
 import org.koin.core.module.Module
 
 fun interface CreateMediaStore {
@@ -8,3 +9,5 @@ fun interface CreateMediaStore {
 }
 
 expect fun platformCreateMediaStoreModule(): Module
+
+expect val platformFileSystem: FileSystem

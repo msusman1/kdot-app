@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.io.coil)
             implementation(libs.logging.napier)
+            implementation(libs.okio)
 
         }
 
@@ -112,6 +113,7 @@ kotlin {
             implementation(libs.trixnity.client.media.opfs)
             implementation(libs.trixnity.client.repository.indexeddb)
             implementation(libs.ktor.client.js)
+            implementation(libs.okio.nodefilesystem)
             implementation(npm("copy-webpack-plugin", libs.versions.copyWebpackPlugin.get()))
         }
     }
