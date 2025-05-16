@@ -28,7 +28,7 @@ data class RoomListState(
             showAvatarIndicator = true,
             hasNetworkConnection = true,
             contextMenu = ContextMenu.Hidden,
-            contentState = RoomListContentState.Empty,
+            contentState = RoomListContentState.Skeleton(16),
             leaveRoomState = LeaveRoomState(
                 confirmation = LeaveRoomState.Confirmation.Hidden,
                 progress = LeaveRoomState.Progress.Hidden,

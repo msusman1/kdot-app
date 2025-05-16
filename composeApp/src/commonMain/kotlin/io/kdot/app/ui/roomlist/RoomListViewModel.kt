@@ -14,6 +14,7 @@ import io.kdot.app.ui.roomlist.filter.RoomListFilterEvents
 import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
 import io.kdot.app.ui.roomlist.search.RoomListSearchEvents
 import io.kdot.app.ui.roomlist.search.RoomListSearchStateHolder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
-import net.folivo.trixnity.client.store.Room
 
 
 class RoomListViewModel(
@@ -51,17 +51,28 @@ class RoomListViewModel(
         }
     }
 
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun getRoomListFlow(): Flow<List<RoomListRoomSummary>> {
-        return clientProvider.getClient().room.getAll().flatMapLatest { roomMap ->
-            val roomFlows: List<Flow<Room>> = roomMap.values.map { it.filterNotNull() }
-            if (roomFlows.isEmpty()) {
-                flowOf(emptyList())
-            } else {
-                combine(roomFlows) { roomList: Array<Room> ->
-                    roomList.map { room -> createRoomSummary(room) }
+        val client = clientProvider.getClient()
+        return client.room
+            .getAll()
+            .flatMapLatest { roomsById ->
+                val summaryFlows: List<Flow<RoomListRoomSummary>> = roomsById.values
+                    .map { roomFlow ->
+                        roomFlow.filterNotNull()
+                            .flatMapLatest { room ->
+                                createRoomSummary(client, room)
+                            }
+                    }
+                if (summaryFlows.isEmpty()) {
+                    flowOf(emptyList())
+                } else {
+                    combine(summaryFlows) { summariesArray ->
+                        summariesArray.toList()
+                    }
                 }
             }
-        }
     }
 
     private fun combineRoomListState(): StateFlow<RoomListState> {
