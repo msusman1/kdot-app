@@ -8,12 +8,14 @@ import io.kdot.app.domain.createRoomSummary
 import io.kdot.app.features.leaveroom.LeaveRoomEvent
 import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.libraries.core.data.combine
+import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.matrix.MatrixClientProvider
 import io.kdot.app.ui.roomlist.RoomListState.ContextMenu
 import io.kdot.app.ui.roomlist.filter.RoomListFilterEvents
 import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
 import io.kdot.app.ui.roomlist.search.RoomListSearchEvents
 import io.kdot.app.ui.roomlist.search.RoomListSearchStateHolder
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
@@ -29,6 +32,7 @@ import net.folivo.trixnity.client.room
 
 class RoomListViewModel(
     private val clientProvider: MatrixClientProvider,
+    private val dateFormatter: DateFormatter
 ) : ViewModel() {
     private val roomListFilterStateHolder = RoomListFilterStateHolder()
     private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
@@ -62,14 +66,14 @@ class RoomListViewModel(
                     .map { roomFlow ->
                         roomFlow.filterNotNull()
                             .flatMapLatest { room ->
-                                createRoomSummary(client, room)
+                                createRoomSummary(client,dateFormatter, room)
                             }
                     }
                 if (summaryFlows.isEmpty()) {
                     flowOf(emptyList())
                 } else {
                     combine(summaryFlows) { summariesArray ->
-                        summariesArray.toList()
+                        summariesArray.toList().reversed()
                     }
                 }
             }
@@ -100,11 +104,12 @@ class RoomListViewModel(
                 filterState = filterState,
                 searchState = searchState
             )
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = RoomListState.Default
-        )
+        }.flowOn(Dispatchers.Default)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = RoomListState.Default
+            )
     }
 
 

@@ -10,6 +10,8 @@ package io.kdot.app.domain
 import androidx.compose.runtime.Immutable
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.kdot.app.designsystem.components.avatar.AvatarSize
+import io.kdot.app.libraries.dateformatter.DateFormatter
+import io.kdot.app.libraries.dateformatter.DateFormatterMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -81,7 +83,11 @@ private fun timelineEventTypeDescription(event: TimelineEvent): String =
     }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun createRoomSummary(client: MatrixClient, room: Room): Flow<RoomListRoomSummary> {
+fun createRoomSummary(
+    client: MatrixClient,
+    dateFormatter: DateFormatter,
+    room: Room
+): Flow<RoomListRoomSummary> {
 
     val eventFlow: Flow<TimelineEvent?> = if (room.lastRelevantEventId != null) {
         client.room.getTimelineEvent(roomId = room.roomId, eventId = room.lastRelevantEventId!!)
@@ -121,7 +127,11 @@ fun createRoomSummary(client: MatrixClient, room: Room): Flow<RoomListRoomSummar
             numberOfUnreadMentions = 0,
             numberOfUnreadNotifications = 0,
             isMarkedUnread = room.markedUnread,
-            timestamp = room.lastRelevantEventTimestamp?.toString(),
+            timestamp = dateFormatter.format(
+                timestamp = room.lastRelevantEventTimestamp?.toEpochMilliseconds(),
+                mode = DateFormatterMode.TimeOrDate,
+                useRelative = true,
+            ),
             lastMessage = lastMsg,
             avatarData = AvatarData(
                 id = room.roomId.full,

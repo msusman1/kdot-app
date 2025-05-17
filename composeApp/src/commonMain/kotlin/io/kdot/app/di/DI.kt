@@ -1,5 +1,7 @@
 package io.kdot.app.di
 
+import io.kdot.app.libraries.dateformatter.DateFormatter
+import io.kdot.app.libraries.dateformatter.DateFormatterImpl
 import io.kdot.app.libraries.matrixui.media.ImageLoaderFactory
 import io.kdot.app.libraries.matrixui.media.ImageLoaderFactoryImpl
 import io.kdot.app.matrix.MatrixClientFactory
@@ -26,6 +28,7 @@ val appModules = module {
     viewModelOf(::OnboardingViewModel)
     single<MatrixClientFactory> { MatrixClientFactoryImpl(get(), get()) }
     single<ImageLoaderFactory> { ImageLoaderFactoryImpl() }
+    single<DateFormatter> { DateFormatterImpl(get(),get(),get(),get(),get()) }
     singleOf(::MatrixClientProvider)
 }
 
