@@ -27,7 +27,7 @@ class DurationFormatterTest {
     }
 
     @Test
-    fun `format hours, minutes and seconds`() {
+    fun `format hours minutes and seconds`() {
         assertEquals(buildDuration(hours = 1).toHumanReadableDuration(),"1:00:00")
         assertEquals(buildDuration(hours = 2, minutes = 10, seconds = 9).toHumanReadableDuration(),"2:10:09")
         assertEquals(buildDuration(hours = 24, minutes = 59, seconds = 59).toHumanReadableDuration(),"24:59:59")

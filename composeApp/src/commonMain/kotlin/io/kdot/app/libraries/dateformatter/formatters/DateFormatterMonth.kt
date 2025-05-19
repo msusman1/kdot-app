@@ -7,10 +7,8 @@
 
 package io.kdot.app.libraries.dateformatter.formatters
 
-import io.kdot.app.designsystem.Resources
 import io.kdot.app.libraries.dateformatter.DateFormatters
 import io.kdot.app.libraries.dateformatter.LocalDateTimeProvider
-import org.jetbrains.compose.resources.stringResource
 
 fun String.safeCapitalize(): String {
     return replaceFirstChar {
@@ -23,7 +21,6 @@ fun String.safeCapitalize(): String {
 }
 
 class DateFormatterMonth(
-
     private val localDateTimeProvider: LocalDateTimeProvider,
     private val dateFormatters: DateFormatters,
 ) {
@@ -34,7 +31,7 @@ class DateFormatterMonth(
         val today = localDateTimeProvider.providesNow()
         val dateToFormat = localDateTimeProvider.providesFromTimestamp(timestamp)
         return if (useRelative && dateToFormat.month == today.month && dateToFormat.year == today.year) {
-            stringResource(Resources.String.common_date_this_month)
+            "This month"
         } else {
             dateFormatters.formatDateWithMonthAndYear(dateToFormat)
         }

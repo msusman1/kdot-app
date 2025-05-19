@@ -15,9 +15,9 @@ import kotlinx.datetime.toLocalDateTime
 
 
 class LocalDateTimeProvider(
+    val clock: Clock,
+    val timeZone: TimeZone,
 ) {
-    val clock = Clock.System
-    val timeZone = TimeZone.currentSystemDefault()
 
     fun providesNow(): LocalDateTime {
         val now: Instant = clock.now()
