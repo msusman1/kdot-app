@@ -14,6 +14,7 @@ import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.libraries.dateformatter.DateFormatterMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -21,11 +22,13 @@ import kotlinx.coroutines.flow.map
 import net.folivo.trixnity.client.MatrixClient
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
+import net.folivo.trixnity.client.store.RoomDisplayName
 import net.folivo.trixnity.client.store.RoomUser
 import net.folivo.trixnity.client.store.TimelineEvent
 import net.folivo.trixnity.client.user
 import net.folivo.trixnity.core.model.RoomAliasId
 import net.folivo.trixnity.core.model.RoomId
+import net.folivo.trixnity.core.model.UserId
 import net.folivo.trixnity.core.model.events.m.room.RoomMessageEventContent
 import net.folivo.trixnity.core.model.events.m.room.RoomMessageEventContent.FileBased
 import net.folivo.trixnity.core.model.events.m.room.RoomMessageEventContent.Location
@@ -58,6 +61,7 @@ data class RoomListRoomSummary(
     val isHighlighted = (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
             isMarkedUnread ||
             displayType == RoomSummaryDisplayType.INVITE
+
     val hasNewContent = numberOfUnreadMessages > 0 ||
             numberOfUnreadMentions > 0 ||
             numberOfUnreadNotifications > 0 ||
@@ -81,6 +85,13 @@ private fun timelineEventTypeDescription(event: TimelineEvent): String =
             else -> ""
         }
     }
+
+
+fun nameFromHeroes(
+    roomUser: RoomUser?,
+    heroes: List<UserId>,
+    index: Int
+) = (roomUser?.name ?: heroes[index].full)
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun createRoomSummary(
@@ -116,12 +127,58 @@ fun createRoomSummary(
         }
     }
 
-    return lastMessage.map { lastMsg ->
+    val roomName: RoomDisplayName? = room.name
+
+    val roomNameToUse = if (roomName != null) {
+        val (explicitName, heroes, otherUsersCount, roomIsEmpty) = roomName
+        when {
+            !explicitName.isNullOrEmpty() -> flowOf(explicitName)
+            heroes.isEmpty() -> {
+                when {
+                    roomIsEmpty -> flowOf("Empty chat")
+                    otherUsersCount > 1 -> flowOf("$otherUsersCount persons")
+                    else -> flowOf(room.roomId.full)
+                }
+            }
+
+            else -> combine(heroes.map { client.user.getById(room.roomId, it) }) {
+                val heroConcat = it.mapIndexed { index: Int, roomUser: RoomUser? ->
+                    when {
+                        otherUsersCount == 0 && index < heroes.size - 2 || otherUsersCount > 0L && index < heroes.size - 1 -> {
+                            nameFromHeroes(roomUser, heroes, index) + ", "
+                        }
+
+                        otherUsersCount == 0 && index == heroes.size - 2 -> {
+                            nameFromHeroes(roomUser, heroes, index) + " And "
+                        }
+
+                        otherUsersCount > 0L && index == heroes.size - 1 -> {
+                            nameFromHeroes(
+                                roomUser,
+                                heroes,
+                                index
+                            ) + " And ${otherUsersCount} others"
+                        }
+
+                        else -> {
+                            nameFromHeroes(roomUser, heroes, index)
+                        }
+                    }
+                }.joinToString("")
+                if (roomIsEmpty) "Empty chat (was ${heroConcat})"
+                else heroConcat
+            }
+        }
+    } else {
+        flowOf(room.roomId.full)
+    }
+
+    return combine(roomNameToUse, lastMessage) { rmName, lastMsg ->
         RoomListRoomSummary(
             id = room.roomId.full,
             displayType = RoomSummaryDisplayType.ROOM,
             roomId = room.roomId,
-            name = room.name?.explicitName,
+            name = rmName,
             canonicalAlias = null,
             numberOfUnreadMessages = room.unreadMessageCount,
             numberOfUnreadMentions = 0,
