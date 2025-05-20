@@ -1,7 +1,6 @@
 package io.kdot.app.ui.roomlist.filter
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 typealias RoomListFilterState = Set<FilterSelectionState>
@@ -9,10 +8,7 @@ typealias RoomListFilterState = Set<FilterSelectionState>
 class RoomListFilterStateHolder {
     private val _selectedFilters = LinkedHashSet<RoomListFilter>()
     private val _filterSelectionState = MutableStateFlow(buildFilters())
-    val filterSelectionState: StateFlow<RoomListFilterState> =
-        _filterSelectionState.asStateFlow()
-
-    val hasAnyFilterSelected = _selectedFilters.isNotEmpty()
+    val filterSelectionState = _filterSelectionState.asStateFlow()
 
     val selectedFilter: List<RoomListFilter> get() = _selectedFilters.toList()
 

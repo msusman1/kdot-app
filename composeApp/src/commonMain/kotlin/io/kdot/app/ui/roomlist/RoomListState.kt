@@ -45,8 +45,7 @@ data class RoomListState(
         )
     }
 
-    val displayFilters = contentState is RoomListContentState.Rooms
-
+    val displayFilters: Boolean get() = contentState !is RoomListContentState.Skeleton
 
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
