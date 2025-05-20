@@ -282,7 +282,9 @@ private fun LastMessageAndIndicatorRow(
                     color = tint,
                 )
             }
-            MentionIndicatorAtom()
+            if (room.numberOfUnreadMentions > 0) {
+                MentionIndicatorAtom()
+            }
             if (room.hasNewContent) {
                 UnreadIndicatorAtom(
                     color = tint

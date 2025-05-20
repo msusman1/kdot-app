@@ -16,13 +16,13 @@ data class AvatarData(
         (name?.takeIf { it.isNotBlank() } ?: id.takeIf { !it.startsWith("!") } ?: "#")
             .let { dn ->
                 var startIndex = 0
-                val initial = dn.getOrNull(startIndex)?:'U'
+                val initial = dn[startIndex]
 
                 if (initial in listOf('@', '#', '+') && dn.length > 1) {
                     startIndex++
                 }
 
-                var next = dn.getOrNull(startIndex)?:'c'
+                var next = dn[startIndex]
 
                 // LEFT-TO-RIGHT MARK
                 if (dn.length >= 2 && 0x200e == next.code) {
@@ -38,19 +38,12 @@ data class AvatarData(
                         break
                     }
                 }
-/*
 
-                val fullCharacterIterator = BreakIterator.getCharacterInstance()
-                fullCharacterIterator.setText(dn)
-                val glyphBoundary = tryOrNull { fullCharacterIterator.following(startIndex) }
-                    ?.takeIf { it in startIndex..dn.length }
-*/
+
 
                 when {
-                    // Use the found boundary
-//                    glyphBoundary != null -> dn.substring(startIndex, glyphBoundary)
                     // If no boundary was found, default to the next char if possible
-                    startIndex + 1 < dn.length -> dn.substring(startIndex, startIndex + 1)
+                    startIndex + 1 <= dn.length -> dn.substring(startIndex, startIndex + 1)
                     // Return a fallback character otherwise
                     else -> "#"
                 }

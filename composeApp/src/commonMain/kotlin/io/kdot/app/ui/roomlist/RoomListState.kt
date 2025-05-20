@@ -24,7 +24,7 @@ data class RoomListState(
 ) {
     companion object {
         val Default = RoomListState(
-            matrixUser = MatrixUser(userId = UserId("")),
+            matrixUser = MatrixUser(userId = UserId("!id:domain")),
             showAvatarIndicator = true,
             hasNetworkConnection = true,
             contextMenu = ContextMenu.Hidden,

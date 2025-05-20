@@ -14,6 +14,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import io.kdot.app.designsystem.Resources
+import io.kdot.app.designsystem.components.avatar.AvatarSize
+import io.kdot.app.ui.roomlist.MatrixUser
+import io.kdot.app.ui.roomlist.getAvatarData
 import io.kdot.app.ui.theme.appColors
 import net.folivo.trixnity.core.model.UserId
 import org.jetbrains.compose.resources.stringResource
@@ -48,5 +51,13 @@ data class InviteSender(
         )
     }
 }
+
+fun MatrixUser.toInviteSender() = InviteSender(
+    userId = userId,
+    displayName = displayName ?: "",
+    avatarData = getAvatarData(size = AvatarSize.InviteSender),
+    membershipChangeReason = null
+)
+
 
 

@@ -1,5 +1,6 @@
 package io.kdot.app.di
 
+import io.kdot.app.data.RoomListRoomSummaryFactory
 import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.libraries.dateformatter.DateFormatterImpl
 import io.kdot.app.libraries.dateformatter.DateFormatters
@@ -14,6 +15,8 @@ import io.kdot.app.libraries.matrixui.media.ImageLoaderFactoryImpl
 import io.kdot.app.matrix.MatrixClientFactory
 import io.kdot.app.matrix.MatrixClientFactoryImpl
 import io.kdot.app.matrix.MatrixClientProvider
+import io.kdot.app.matrix.extensions.RoomLastMessageFormatter
+import io.kdot.app.matrix.extensions.RoomNameFormatter
 import io.kdot.app.matrix.platformWebLinkHandlerModule
 import io.kdot.app.matrix.platformCreateMediaStoreModule
 import io.kdot.app.matrix.platformCreateRepositoriesModule
@@ -38,6 +41,9 @@ val appModules = module {
     single<MatrixClientFactory> { MatrixClientFactoryImpl(get(), get()) }
     single<ImageLoaderFactory> { ImageLoaderFactoryImpl() }
 
+    single { RoomListRoomSummaryFactory(get(),get(), get()) }
+    single { RoomLastMessageFormatter() }
+    single { RoomNameFormatter() }
 }
 
 val dateModules = module {

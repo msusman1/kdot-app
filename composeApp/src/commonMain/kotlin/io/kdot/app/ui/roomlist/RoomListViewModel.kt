@@ -2,18 +2,21 @@ package io.kdot.app.ui.roomlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.github.aakira.napier.Napier
+import io.kdot.app.data.RoomListRoomSummaryFactory
 import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
 import io.kdot.app.domain.RoomListRoomSummary
-import io.kdot.app.domain.createRoomSummary
 import io.kdot.app.features.leaveroom.LeaveRoomEvent
+import io.kdot.app.features.leaveroom.LeaveRoomState
 import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.libraries.core.data.combine
-import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.matrix.MatrixClientProvider
+import io.kdot.app.matrix.extensions.getAllFlatten
 import io.kdot.app.ui.roomlist.RoomListState.ContextMenu
 import io.kdot.app.ui.roomlist.filter.RoomListFilterEvents
 import io.kdot.app.ui.roomlist.filter.RoomListFilterStateHolder
 import io.kdot.app.ui.roomlist.search.RoomListSearchEvents
+import io.kdot.app.ui.roomlist.search.RoomListSearchState
 import io.kdot.app.ui.roomlist.search.RoomListSearchStateHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,18 +24,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
+import net.folivo.trixnity.client.store.Room
 
 
 class RoomListViewModel(
     private val clientProvider: MatrixClientProvider,
-    private val dateFormatter: DateFormatter
+    private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory
 ) : ViewModel() {
     private val roomListFilterStateHolder = RoomListFilterStateHolder()
     private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
@@ -59,27 +63,27 @@ class RoomListViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun getRoomListFlow(): Flow<List<RoomListRoomSummary>> {
         val client = clientProvider.getClient()
-        return client.room
-            .getAll()
-            .flatMapLatest { roomsById ->
-                val summaryFlows: List<Flow<RoomListRoomSummary>> = roomsById.values
-                    .map { roomFlow ->
-                        roomFlow.filterNotNull()
-                            .flatMapLatest { room ->
-                                createRoomSummary(client,dateFormatter, room)
-                            }
-                    }
-                if (summaryFlows.isEmpty()) {
-                    flowOf(emptyList())
-                } else {
-                    combine(summaryFlows) { summariesArray ->
-                        summariesArray.toList().reversed()
-                    }
+        val roomsFlow: Flow<List<Room>> = client.room.getAllFlatten().onEach {
+            Napier.d("flow size: ${it.size}")
+        }
+        return roomsFlow.flatMapLatest { rooms ->
+            if (rooms.isEmpty()) {
+                flowOf(emptyList())
+            } else {
+                val summaryFlows = rooms.map { room ->
+                    roomListRoomSummaryFactory.create(client, room)
                 }
+                combine(summaryFlows) { it.toList() }
             }
+        }.onEach {
+            Napier.d("Summary size: ${it.size}")
+        }
     }
 
+
     private fun combineRoomListState(): StateFlow<RoomListState> {
+
+
         return combine(
             matrixUser,
             roomListFilterStateHolder.filterSelectionState,
@@ -87,22 +91,24 @@ class RoomListViewModel(
             leaveRoomStateHolder.leaveRoomStateFlow,
             roomListSearchStateHolder.state,
             rooms
-        ) { usr, filterState, snackbarMessage, leaveRoomState, searchState, rms ->
-            val roomContentState = if (rms.isEmpty()) {
-                RoomListContentState.Empty
-            } else {
-                RoomListContentState.Rooms(rms)
-            }
+        ) { user, filterState, snackbarMessage, leaveRoomState, searchState, rms ->
+            val roomContentState = if (rms.isEmpty()) RoomListContentState.Empty
+            else RoomListContentState.Rooms(rms.toList())
             RoomListState(
-                matrixUser = usr,
+                matrixUser = user,
                 showAvatarIndicator = true,
                 hasNetworkConnection = true,
                 contextMenu = ContextMenu.Hidden,
                 contentState = roomContentState,
-                leaveRoomState = leaveRoomState,
-                snackbarMessage = snackbarMessage,
-                filterState = filterState,
-                searchState = searchState
+                leaveRoomState = LeaveRoomState.Default,
+                snackbarMessage = null,
+                filterState = emptySet(),
+                searchState = RoomListSearchState(
+                    isSearchActive = false,
+                    query = "",
+                    results = emptyList(),
+                    isRoomDirectorySearchEnabled = false
+                )
             )
         }.flowOn(Dispatchers.Default)
             .stateIn(

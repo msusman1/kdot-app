@@ -1,0 +1,130 @@
+package io.kdot.app.data
+
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
+import io.kdot.app.designsystem.components.avatar.AvatarSize
+import io.kdot.app.domain.AvatarData
+import io.kdot.app.domain.RoomListRoomSummary
+import io.kdot.app.libraries.dateformatter.DateFormatter
+import io.kdot.app.libraries.dateformatter.DateFormatterMode
+import io.kdot.app.matrix.extensions.RoomLastMessageFormatter
+import io.kdot.app.matrix.extensions.RoomNameFormatter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import net.folivo.trixnity.client.MatrixClient
+import net.folivo.trixnity.client.room
+import net.folivo.trixnity.client.store.Room
+import net.folivo.trixnity.client.store.TimelineEvent
+import net.folivo.trixnity.core.model.events.m.room.Membership
+
+
+class RoomListRoomSummaryFactory(
+    private val dateFormatter: DateFormatter,
+    private val roomNameFormatter: RoomNameFormatter,
+    private val roomLastMessageFormatter: RoomLastMessageFormatter,
+) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun create(
+        client: MatrixClient, room: Room
+    ): Flow<RoomListRoomSummary> {
+
+        val lastEventFlow: Flow<TimelineEvent?> = if (room.lastRelevantEventId != null) {
+            client.room.getTimelineEvent(roomId = room.roomId, eventId = room.lastRelevantEventId!!)
+        } else {
+            flowOf(null)
+        }.distinctUntilChanged()
+
+
+        val lastMessage: Flow<String> =
+            lastEventFlow.flatMapLatest { lastTimelineEvent: TimelineEvent? ->
+                if (lastTimelineEvent != null) {
+                    flowOf(
+                        roomLastMessageFormatter.format(
+                            lastTimelineEvent, room.isDirect, client.userId
+                        )
+                    )
+                } else {
+                    flowOf("")
+                }
+            }
+
+        val roomDetailFlow: Flow<Room> = client.room.getById(room.roomId).filterNotNull()
+        /*  val inviterFlow: Flow<ClientEvent.StateBaseEvent<MemberEventContent>?> =
+              client.room.getState(
+                  room.roomId,
+                  eventContentClass = MemberEventContent::class,
+                  stateKey = client.userId.full
+              )*/
+        /*  val roomAliasFLow = client.room
+              .getState(room.roomId, eventContentClass = CanonicalAliasEventContent::class)
+
+
+
+  */
+
+        /*  val isFavouriteFlow = flow {
+              val tag = client.api.room.getTags(userId = client.userId, roomId = room.roomId)
+              tag.onSuccess {
+                  val tag: TagEventContent.TagName? = it.tags.keys.firstOrNull()
+                  emit(tag is TagEventContent.TagName.Favourite)
+              }.onFailure {
+                  emit(false)
+              }
+          }*/
+
+        return combine(
+            roomDetailFlow, lastMessage,   /*roomAliasFLow, , inviterFlow*/
+        ) { roomDetail, lastMessage   /*roomAlias, , inviter*/ ->
+            val roomName = roomNameFormatter.format(room)
+            /*  val inviterSender =
+                  inviter.takeIf { it != null && it.content.membership == Membership.INVITE }
+                      ?.sender?.let {
+                          client.api.user.getUserAvatar(it).toInviteSender()
+                      }
+
+
+              val heroes: List<AvatarData> = roomDetail.name?.heroes?.mapNotNull {
+                  client.api.user.getUserAvatar(it).getAvatarData(AvatarSize.RoomListItem)
+              }.orEmpty()*/
+
+            RoomListRoomSummary(
+                id = room.roomId.full,
+                displayType = when (roomDetail.membership) {
+                    Membership.JOIN -> RoomSummaryDisplayType.ROOM
+                    Membership.INVITE -> RoomSummaryDisplayType.INVITE
+                    Membership.KNOCK -> RoomSummaryDisplayType.KNOCKED
+                    else -> RoomSummaryDisplayType.PLACEHOLDER
+                },
+                roomId = room.roomId,
+                name = roomName,
+                canonicalAlias = null,
+                numberOfUnreadMessages = roomDetail.unreadMessageCount,
+                numberOfUnreadMentions = 0,
+                numberOfUnreadNotifications = 0,
+                isMarkedUnread = room.markedUnread,
+                timestamp = dateFormatter.format(
+                    timestamp = room.lastRelevantEventTimestamp?.toEpochMilliseconds(),
+                    mode = DateFormatterMode.TimeOrDate,
+                    useRelative = true,
+                ),
+                lastMessage = lastMessage,
+                avatarData = AvatarData(
+                    id = room.roomId.full,
+                    url = room.avatarUrl,
+                    name = roomName,
+                    size = AvatarSize.RoomListItem
+                ),
+                hasRoomCall = false,
+                isDirect = room.isDirect,
+                isDm = room.isDirect,
+                isFavorite = false,
+                inviteSender = null,
+                heroes = emptyList()
+            )
+        }
+    }
+}
