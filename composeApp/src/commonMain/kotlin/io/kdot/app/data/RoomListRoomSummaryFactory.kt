@@ -6,19 +6,22 @@ import io.kdot.app.domain.AvatarData
 import io.kdot.app.domain.RoomListRoomSummary
 import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.libraries.dateformatter.DateFormatterMode
-import io.kdot.app.matrix.extensions.RoomLastMessageFormatter
-import io.kdot.app.matrix.extensions.RoomNameFormatter
+import io.kdot.app.matrix.extensions.isDm
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import net.folivo.trixnity.client.MatrixClient
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
 import net.folivo.trixnity.client.store.TimelineEvent
+import net.folivo.trixnity.core.model.events.ClientEvent
+import net.folivo.trixnity.core.model.events.m.TagEventContent
+import net.folivo.trixnity.core.model.events.m.room.MemberEventContent
 import net.folivo.trixnity.core.model.events.m.room.Membership
 
 
@@ -31,7 +34,7 @@ class RoomListRoomSummaryFactory(
     fun create(
         client: MatrixClient, room: Room
     ): Flow<RoomListRoomSummary> {
-
+        room.isDirect
         val lastEventFlow: Flow<TimelineEvent?> = if (room.lastRelevantEventId != null) {
             client.room.getTimelineEvent(roomId = room.roomId, eventId = room.lastRelevantEventId!!)
         } else {
@@ -53,12 +56,12 @@ class RoomListRoomSummaryFactory(
             }
 
         val roomDetailFlow: Flow<Room> = client.room.getById(room.roomId).filterNotNull()
-        /*  val inviterFlow: Flow<ClientEvent.StateBaseEvent<MemberEventContent>?> =
-              client.room.getState(
-                  room.roomId,
-                  eventContentClass = MemberEventContent::class,
-                  stateKey = client.userId.full
-              )*/
+        /*   val inviterFlow: Flow<ClientEvent.StateBaseEvent<MemberEventContent>?> =
+               client.room.getState(
+                   room.roomId,
+                   eventContentClass = MemberEventContent::class,
+                   stateKey = client.userId.full
+               )*/
         /*  val roomAliasFLow = client.room
               .getState(room.roomId, eventContentClass = CanonicalAliasEventContent::class)
 
@@ -66,19 +69,19 @@ class RoomListRoomSummaryFactory(
 
   */
 
-        /*  val isFavouriteFlow = flow {
-              val tag = client.api.room.getTags(userId = client.userId, roomId = room.roomId)
-              tag.onSuccess {
-                  val tag: TagEventContent.TagName? = it.tags.keys.firstOrNull()
-                  emit(tag is TagEventContent.TagName.Favourite)
-              }.onFailure {
-                  emit(false)
-              }
-          }*/
+        val isFavouriteFlow = flow {
+            val result = client.api.room.getTags(userId = client.userId, roomId = room.roomId)
+                .getOrNull()
+                ?.tags
+                ?.keys
+                ?.any { it is TagEventContent.TagName.Favourite }
+                ?: false
+            emit(result)
+        }
 
         return combine(
-            roomDetailFlow, lastMessage,   /*roomAliasFLow, , inviterFlow*/
-        ) { roomDetail, lastMessage   /*roomAlias, , inviter*/ ->
+            roomDetailFlow, lastMessage, isFavouriteFlow,   /*roomAliasFLow, , inviterFlow*/
+        ) { roomDetail, lastMessage, isFavourite  /*roomAlias, , inviter*/ ->
             val roomName = roomNameFormatter.format(room)
             /*  val inviterSender =
                   inviter.takeIf { it != null && it.content.membership == Membership.INVITE }
@@ -90,6 +93,7 @@ class RoomListRoomSummaryFactory(
               val heroes: List<AvatarData> = roomDetail.name?.heroes?.mapNotNull {
                   client.api.user.getUserAvatar(it).getAvatarData(AvatarSize.RoomListItem)
               }.orEmpty()*/
+
 
             RoomListRoomSummary(
                 id = room.roomId.full,
@@ -120,8 +124,8 @@ class RoomListRoomSummaryFactory(
                 ),
                 hasRoomCall = false,
                 isDirect = room.isDirect,
-                isDm = room.isDirect,
-                isFavorite = false,
+                isDm = room.isDm,
+                isFavorite = isFavourite,
                 inviteSender = null,
                 heroes = emptyList()
             )
