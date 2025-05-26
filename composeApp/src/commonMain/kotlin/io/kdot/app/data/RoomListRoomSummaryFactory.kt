@@ -13,15 +13,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import net.folivo.trixnity.client.MatrixClient
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
 import net.folivo.trixnity.client.store.TimelineEvent
-import net.folivo.trixnity.core.model.events.ClientEvent
-import net.folivo.trixnity.core.model.events.m.TagEventContent
-import net.folivo.trixnity.core.model.events.m.room.MemberEventContent
 import net.folivo.trixnity.core.model.events.m.room.Membership
 
 
@@ -29,12 +25,13 @@ class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
     private val roomNameFormatter: RoomNameFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
+    private val roomFavouriteRepository: RoomFavouriteRepository
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun create(
         client: MatrixClient, room: Room
     ): Flow<RoomListRoomSummary> {
-        room.isDirect
+
         val lastEventFlow: Flow<TimelineEvent?> = if (room.lastRelevantEventId != null) {
             client.room.getTimelineEvent(roomId = room.roomId, eventId = room.lastRelevantEventId!!)
         } else {
@@ -69,15 +66,9 @@ class RoomListRoomSummaryFactory(
 
   */
 
-        val isFavouriteFlow = flow {
-            val result = client.api.room.getTags(userId = client.userId, roomId = room.roomId)
-                .getOrNull()
-                ?.tags
-                ?.keys
-                ?.any { it is TagEventContent.TagName.Favourite }
-                ?: false
-            emit(result)
-        }
+
+        val isFavouriteFlow = roomFavouriteRepository.checkRoomFav(room.roomId)
+
 
         return combine(
             roomDetailFlow, lastMessage, isFavouriteFlow,   /*roomAliasFLow, , inviterFlow*/

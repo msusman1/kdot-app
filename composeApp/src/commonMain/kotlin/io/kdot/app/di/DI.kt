@@ -1,6 +1,10 @@
 package io.kdot.app.di
 
+import io.kdot.app.data.RoomFavouriteRepository
+import io.kdot.app.data.RoomFavouriteRepositoryImpl
+import io.kdot.app.data.RoomLastMessageFormatter
 import io.kdot.app.data.RoomListRoomSummaryFactory
+import io.kdot.app.data.RoomNameFormatter
 import io.kdot.app.libraries.dateformatter.DateFormatter
 import io.kdot.app.libraries.dateformatter.DateFormatterImpl
 import io.kdot.app.libraries.dateformatter.DateFormatters
@@ -15,8 +19,6 @@ import io.kdot.app.libraries.matrixui.media.ImageLoaderFactoryImpl
 import io.kdot.app.matrix.MatrixClientFactory
 import io.kdot.app.matrix.MatrixClientFactoryImpl
 import io.kdot.app.matrix.MatrixClientProvider
-import io.kdot.app.matrix.extensions.RoomLastMessageFormatter
-import io.kdot.app.matrix.extensions.RoomNameFormatter
 import io.kdot.app.matrix.platformWebLinkHandlerModule
 import io.kdot.app.matrix.platformCreateMediaStoreModule
 import io.kdot.app.matrix.platformCreateRepositoriesModule
@@ -40,8 +42,9 @@ val appModules = module {
     viewModelOf(::OnboardingViewModel)
     single<MatrixClientFactory> { MatrixClientFactoryImpl(get(), get()) }
     single<ImageLoaderFactory> { ImageLoaderFactoryImpl() }
+    single<RoomFavouriteRepository> { RoomFavouriteRepositoryImpl(get()) }
 
-    single { RoomListRoomSummaryFactory(get(),get(), get()) }
+    single { RoomListRoomSummaryFactory(get(), get(), get(), get()) }
     single { RoomLastMessageFormatter() }
     single { RoomNameFormatter() }
 }

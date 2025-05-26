@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.github.aakira.napier.Napier
+import io.kdot.app.data.RoomFavouriteRepository
 import io.kdot.app.data.RoomListRoomSummaryFactory
 import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
 import io.kdot.app.domain.RoomListRoomSummary
@@ -21,31 +22,38 @@ import io.kdot.app.ui.roomlist.search.RoomListSearchStateHolder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
+import net.folivo.trixnity.clientserverapi.client.SyncState
 
 
 class RoomListViewModel(
     private val clientProvider: MatrixClientProvider,
-    private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory
+    private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory,
+    private val roomFavouriteRepository: RoomFavouriteRepository
 ) : ViewModel() {
     private val roomListFilterStateHolder = RoomListFilterStateHolder()
     private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
     private val roomListSearchStateHolder = RoomListSearchStateHolder()
     private val snackbarDispatcher = SnackbarDispatcher()
+    private val _contextMenuState = MutableStateFlow<ContextMenu>(ContextMenu.Hidden)
+    val contextMenuState: StateFlow<ContextMenu> = _contextMenuState.asStateFlow()
 
     private val matrixUser = createMatrixUserFlow()
     private val roomsFlow: Flow<List<RoomListRoomSummary>> = getRoomListFlow()
-    val roomListState = combineRoomListState()
+    val roomListState: StateFlow<RoomListState> = combineRoomListState()
+
 
     private fun createMatrixUserFlow(): Flow<MatrixUser> {
         val avatarUrl = clientProvider.getClient().avatarUrl
@@ -63,9 +71,7 @@ class RoomListViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun getRoomListFlow(): Flow<List<RoomListRoomSummary>> {
         val client = clientProvider.getClient()
-        val roomsFlow: Flow<List<Room>> = client.room.getAllFlatten().onEach {
-            Napier.d("flow size: ${it.size}")
-        }
+        val roomsFlow: Flow<List<Room>> = client.room.getAllFlatten()
         return roomsFlow.flatMapLatest { rooms ->
             if (rooms.isEmpty()) {
                 flowOf(emptyList())
@@ -75,8 +81,6 @@ class RoomListViewModel(
                 }
                 combine(summaryFlows) { it.toList() }
             }
-        }.onEach {
-            Napier.d("Summary size: ${it.size}")
         }
     }
 
@@ -88,9 +92,9 @@ class RoomListViewModel(
             snackbarDispatcher.snackbarMessage,
             leaveRoomStateHolder.leaveRoomStateFlow,
             roomListSearchStateHolder.state,
-            roomsFlow
-        ) { user, filterState, snackbarMessage, leaveRoomState, searchState, rooms ->
-
+            roomsFlow,
+            contextMenuState
+        ) { user, filterState, snackbarMessage, leaveRoomState, searchState, rooms, contextMenu ->
 
 
             val selectedFilters = filterState
@@ -115,12 +119,11 @@ class RoomListViewModel(
             } else {
                 emptyList<RoomListRoomSummary>()
             }
-
             RoomListState(
                 matrixUser = user,
                 showAvatarIndicator = true,
                 hasNetworkConnection = true,
-                contextMenu = ContextMenu.Hidden,
+                contextMenu = contextMenu,
                 contentState = roomContentState,
                 leaveRoomState = leaveRoomState,
                 snackbarMessage = snackbarMessage,
@@ -148,13 +151,45 @@ class RoomListViewModel(
     fun eventSink(contextMenuEvents: RoomListEvents) {
         when (contextMenuEvents) {
             is RoomListEvents.AcceptInvite -> {}
-            RoomListEvents.HideContextMenu -> {}
+            RoomListEvents.HideContextMenu -> {
+                _contextMenuState.value = ContextMenu.Hidden
+            }
             is RoomListEvents.LeaveRoom -> {}
             is RoomListEvents.MarkAsRead -> {}
             is RoomListEvents.MarkAsUnread -> {}
-            is RoomListEvents.SetRoomIsFavorite -> {}
+            is RoomListEvents.SetRoomIsFavorite -> {
+                val roomId = contextMenuEvents.roomId
+                val isFav = contextMenuEvents.isFavorite
+                _contextMenuState.update {
+                    if (it is ContextMenu.Shown) {
+                        it.copy(isFavorite = isFav)
+                    } else {
+                        it
+                    }
+                }
+                viewModelScope.launch {
+                    runCatching {
+                        roomFavouriteRepository.toggleFavourite(
+                            roomId = roomId,
+                            isFavorite = isFav
+                        )
+                    }
+                }
+            }
+
             is RoomListEvents.DeclineInvite -> {}
-            is RoomListEvents.ShowContextMenu -> {}
+            is RoomListEvents.ShowContextMenu -> {
+                _contextMenuState.value = ContextMenu.Shown(
+                    roomId = contextMenuEvents.roomListRoomSummary.roomId,
+                    roomName = contextMenuEvents.roomListRoomSummary.name,
+                    isDm = contextMenuEvents.roomListRoomSummary.isDm,
+                    isFavorite = contextMenuEvents.roomListRoomSummary.isFavorite,
+                    markAsUnreadFeatureFlagEnabled = true,
+                    hasNewContent = contextMenuEvents.roomListRoomSummary.hasNewContent
+                )
+
+            }
+
             RoomListEvents.ToggleSearchResults -> {
                 roomListSearchStateHolder.handleEvent(RoomListSearchEvents.ToggleSearchVisibility)
             }
