@@ -49,9 +49,6 @@ val UserId.extractedDisplayName: String
     get() = full.removePrefix("@").substringBefore(":")
 
 
-val RoomAliasId.localpart: String
-    get() = full.trimStart(sigilCharacter).substringBefore(':')
-
 
 
 
