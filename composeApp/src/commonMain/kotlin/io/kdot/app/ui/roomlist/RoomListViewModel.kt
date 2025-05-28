@@ -3,7 +3,6 @@ package io.kdot.app.ui.roomlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
-import io.github.aakira.napier.Napier
 import io.kdot.app.data.RoomFavouriteRepository
 import io.kdot.app.data.RoomListRoomSummaryFactory
 import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
@@ -35,7 +34,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
-import net.folivo.trixnity.clientserverapi.client.SyncState
 
 
 class RoomListViewModel(
