@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,7 +24,9 @@ import io.kdot.app.designsystem.Resources
 import io.kdot.app.designsystem.atomic.atom.ElementLogoAtomSize
 import io.kdot.app.designsystem.atomic.atom.KDotLogoAtom
 import io.kdot.app.designsystem.atomic.molecule.ButtonColumnMolecule
+import io.kdot.app.ui.theme.KDotTheme
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -36,6 +39,24 @@ fun OnBoardingScreen(
         onSignIn = onSignIn,
         onCreateAccount = vm::onSignUpClicked,
     )
+}
+
+
+@Composable
+fun KDotPreview(content: @Composable () -> Unit) {
+    KDotTheme {
+        Surface(content = content)
+    }
+}
+
+@Preview
+@Composable
+fun OnBoardingPreview() {
+    KDotPreview {
+        OnBoardingView(
+            onSignIn = {},
+            onCreateAccount = {})
+    }
 }
 
 
@@ -102,6 +123,7 @@ private fun OnBoardingContent() {
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 17.sp),
                     textAlign = TextAlign.Center
                 )
+
             }
         }
 
