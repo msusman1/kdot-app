@@ -44,7 +44,7 @@ class RoomListViewModel(
     private val roomListFilterStateHolder = RoomListFilterStateHolder()
     private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
     private val roomListSearchStateHolder = RoomListSearchStateHolder()
-    private val snackbarDispatcher = SnackbarDispatcher()
+    private val snackBarDispatcher = SnackbarDispatcher()
     private val _contextMenuState = MutableStateFlow<ContextMenu>(ContextMenu.Hidden)
     val contextMenuState: StateFlow<ContextMenu> = _contextMenuState.asStateFlow()
 
@@ -87,7 +87,7 @@ class RoomListViewModel(
         return combine(
             matrixUser,
             roomListFilterStateHolder.filterSelectionState,
-            snackbarDispatcher.snackbarMessage,
+            snackBarDispatcher.snackbarMessage,
             leaveRoomStateHolder.leaveRoomStateFlow,
             roomListSearchStateHolder.state,
             roomsFlow,
