@@ -16,3 +16,6 @@ enum class RoomListFilter(val readable: String) {
             Invites -> setOf(Rooms, People, Unread, Favourites)
         }
 }
+
+fun RoomListFilter.toSelectedState() = FilterSelectionState(this, true)
+fun RoomListFilter.toUnSelectedState() = FilterSelectionState(this, false)

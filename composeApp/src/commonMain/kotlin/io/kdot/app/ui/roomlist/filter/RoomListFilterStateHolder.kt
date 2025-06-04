@@ -10,7 +10,6 @@ class RoomListFilterStateHolder {
     private val _filterSelectionState = MutableStateFlow(buildFilters())
     val filterSelectionState = _filterSelectionState.asStateFlow()
 
-    val selectedFilter: List<RoomListFilter> get() = _selectedFilters.toList()
 
     private fun select(roomListFilter: RoomListFilter) {
         _selectedFilters.add(roomListFilter)
@@ -47,21 +46,15 @@ class RoomListFilterStateHolder {
     }
 
     private fun buildFilters(): Set<FilterSelectionState> {
-        val selectedFilterStates = _selectedFilters.map {
-            FilterSelectionState(
-                roomListFilter = it,
-                isSelected = true
-            )
-        }
-        val unselectedFilters = RoomListFilter.entries - _selectedFilters - _selectedFilters
+        val selectedFilterStates = _selectedFilters.map(RoomListFilter::toSelectedState)
+
+        val incompatibleFilters = _selectedFilters
             .flatMap { it.incompatibleFilters }
             .toSet()
-        val unselectedFilterStates = unselectedFilters.map {
-            FilterSelectionState(
-                roomListFilter = it,
-                isSelected = false
-            )
-        }
+        val allFilters = RoomListFilter.entries
+        val remainingUnselectedFilters = allFilters - incompatibleFilters - _selectedFilters
+        val unselectedFilterStates =
+            remainingUnselectedFilters.map(RoomListFilter::toUnSelectedState)
         return (selectedFilterStates + unselectedFilterStates).toSet()
 
     }
