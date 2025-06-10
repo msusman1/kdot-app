@@ -82,7 +82,7 @@ internal class CoilMediaFetcher(
         return mediaService.getMedia(
             uri = mediaSource.url,
         ).map { platformMedia ->
-            platformMedia.toByteArray().asSourceResult()
+            platformMedia.toByteArray()?.asSourceResult()
         }.onFailure {
             Napier.e("fetchContent failed:$it")
         }.getOrNull()
@@ -99,7 +99,7 @@ internal class CoilMediaFetcher(
             width = kind.width,
             height = kind.height,
         ).map { byteArray ->
-            byteArray.toByteArray().asSourceResult()
+            byteArray.toByteArray()?.asSourceResult()
         }.onFailure {
             Napier.e("getThumbnail failed:$it")
         }.getOrNull()

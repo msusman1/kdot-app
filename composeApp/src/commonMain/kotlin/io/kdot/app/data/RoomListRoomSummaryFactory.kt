@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import net.folivo.trixnity.client.MatrixClient
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
@@ -32,25 +32,23 @@ class RoomListRoomSummaryFactory(
         client: MatrixClient, room: Room
     ): Flow<RoomListRoomSummary> {
 
-        val lastEventFlow: Flow<TimelineEvent?> = if (room.lastRelevantEventId != null) {
-            client.room.getTimelineEvent(roomId = room.roomId, eventId = room.lastRelevantEventId!!)
-        } else {
-            flowOf(null)
-        }.distinctUntilChanged()
 
-
-        val lastMessage: Flow<String> =
-            lastEventFlow.flatMapLatest { lastTimelineEvent: TimelineEvent? ->
-                if (lastTimelineEvent != null) {
-                    flowOf(
+        val lastMessage: Flow<String> = room.lastRelevantEventId?.let { lastEventId ->
+            client.room.getTimelineEvent(roomId = room.roomId, eventId = lastEventId)
+                .distinctUntilChanged()
+                .map { lastTimelineEvent: TimelineEvent? ->
+                    if (lastTimelineEvent != null) {
                         roomLastMessageFormatter.format(
-                            lastTimelineEvent, room.isDirect, client.userId
+                            event = lastTimelineEvent,
+                            isDirect = room.isDirect,
+                            me = client.userId
                         )
-                    )
-                } else {
-                    flowOf("")
+                    } else {
+                        ""
+                    }
                 }
-            }
+        } ?: flowOf("")
+
 
         val roomDetailFlow: Flow<Room> = client.room.getById(room.roomId).filterNotNull()
         /*   val inviterFlow: Flow<ClientEvent.StateBaseEvent<MemberEventContent>?> =

@@ -7,6 +7,7 @@ import io.kdot.app.data.RoomFavouriteRepository
 import io.kdot.app.data.RoomListRoomSummaryFactory
 import io.kdot.app.designsystem.utils.snackbar.SnackbarDispatcher
 import io.kdot.app.domain.RoomListRoomSummary
+import io.kdot.app.domain.usecase.LeaveRoomUseCase
 import io.kdot.app.features.leaveroom.LeaveRoomEvent
 import io.kdot.app.features.leaveroom.LeaveRoomStateHolder
 import io.kdot.app.libraries.core.data.combine
@@ -34,19 +35,27 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.folivo.trixnity.client.room
 import net.folivo.trixnity.client.store.Room
+import net.folivo.trixnity.core.model.EventId
+import net.folivo.trixnity.core.model.RoomId
 
 
 class RoomListViewModel(
     private val clientProvider: MatrixClientProvider,
     private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory,
-    private val roomFavouriteRepository: RoomFavouriteRepository
+    private val roomFavouriteRepository: RoomFavouriteRepository,
+    private val leaveRoomUseCase: LeaveRoomUseCase
 ) : ViewModel() {
     private val roomListFilterStateHolder = RoomListFilterStateHolder()
-    private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope)
+    private val leaveRoomStateHolder = LeaveRoomStateHolder(clientProvider, viewModelScope,leaveRoomUseCase)
     private val roomListSearchStateHolder = RoomListSearchStateHolder()
     private val snackBarDispatcher = SnackbarDispatcher()
     private val _contextMenuState = MutableStateFlow<ContextMenu>(ContextMenu.Hidden)
     val contextMenuState: StateFlow<ContextMenu> = _contextMenuState.asStateFlow()
+
+
+    init {
+        initializeSync()
+    }
 
     private val matrixUser = createMatrixUserFlow()
     private val roomsFlow: Flow<List<RoomListRoomSummary>> = getRoomListFlow()
@@ -137,10 +146,6 @@ class RoomListViewModel(
     }
 
 
-    init {
-        initializeSync()
-    }
-
     private fun initializeSync() = viewModelScope.launch {
         clientProvider.getClient().startSync()
     }
@@ -152,7 +157,11 @@ class RoomListViewModel(
             RoomListEvents.HideContextMenu -> {
                 _contextMenuState.value = ContextMenu.Hidden
             }
-            is RoomListEvents.LeaveRoom -> {}
+
+            is RoomListEvents.LeaveRoom -> {
+                eventSinkLeaveRoom(LeaveRoomEvent.ShowConfirmation(contextMenuEvents.roomId))
+            }
+
             is RoomListEvents.MarkAsRead -> {}
             is RoomListEvents.MarkAsUnread -> {}
             is RoomListEvents.SetRoomIsFavorite -> {

@@ -1,8 +1,8 @@
 package io.kdot.app.features.leaveroom
 
+import io.kdot.app.domain.usecase.LeaveRoomUseCase
 import io.kdot.app.matrix.MatrixClientProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -16,7 +16,8 @@ import net.folivo.trixnity.core.model.RoomId
 
 class LeaveRoomStateHolder(
     private val clientProvider: MatrixClientProvider,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val leaveRoomUseCase: LeaveRoomUseCase
 ) {
 
     private val _leaveRoomStateFlow = MutableStateFlow(
@@ -82,8 +83,7 @@ class LeaveRoomStateHolder(
                 progress = LeaveRoomState.Progress.Shown
             )
         }
-//        this.room.forgetRoom(roomId)  todo check this
-        delay(2000)
+        leaveRoomUseCase(this, roomId)
         _leaveRoomStateFlow.update {
             it.copy(
                 progress = LeaveRoomState.Progress.Hidden
